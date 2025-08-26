@@ -16,6 +16,260 @@ import {
 } from '../../lib/database';
 import Link from 'next/link';
 
+// Mock data for testing when database is empty
+const getMockQuestions = (categoryName: string): Question[] => {
+  const mockQuestionsData: Record<string, Question[]> = {
+    'General Knowledge': [
+      {
+        id: 'mock-gk-1',
+        category_id: 'mock-cat-gk',
+        question_text: 'What is the capital of France?',
+        question_type: 'multiple_choice',
+        difficulty: 'easy',
+        options: {
+          'A': 'London',
+          'B': 'Berlin',
+          'C': 'Paris',
+          'D': 'Madrid'
+        },
+        correct_answer: 'C',
+        explanation: 'Paris is the capital and largest city of France.',
+        points: 10,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 'mock-gk-2',
+        category_id: 'mock-cat-gk',
+        question_text: 'Which planet is known as the Red Planet?',
+        question_type: 'multiple_choice',
+        difficulty: 'medium',
+        options: {
+          'A': 'Venus',
+          'B': 'Mars',
+          'C': 'Jupiter',
+          'D': 'Saturn'
+        },
+        correct_answer: 'B',
+        explanation: 'Mars is called the Red Planet due to its reddish appearance.',
+        points: 15,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 'mock-gk-3',
+        category_id: 'mock-cat-gk',
+        question_text: 'What is the largest ocean on Earth?',
+        question_type: 'multiple_choice',
+        difficulty: 'easy',
+        options: {
+          'A': 'Atlantic Ocean',
+          'B': 'Indian Ocean',
+          'C': 'Arctic Ocean',
+          'D': 'Pacific Ocean'
+        },
+        correct_answer: 'D',
+        explanation: 'The Pacific Ocean is the largest ocean covering about 1/3 of Earth\'s surface.',
+        points: 10,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ],
+    'Science': [
+      {
+        id: 'mock-sci-1',
+        category_id: 'mock-cat-sci',
+        question_text: 'What is the chemical symbol for gold?',
+        question_type: 'multiple_choice',
+        difficulty: 'medium',
+        options: {
+          'A': 'Go',
+          'B': 'Gd',
+          'C': 'Au',
+          'D': 'Ag'
+        },
+        correct_answer: 'C',
+        explanation: 'Au comes from the Latin word "aurum" meaning gold.',
+        points: 15,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 'mock-sci-2',
+        category_id: 'mock-cat-sci',
+        question_text: 'How many bones are there in an adult human body?',
+        question_type: 'multiple_choice',
+        difficulty: 'hard',
+        options: {
+          'A': '196',
+          'B': '206',
+          'C': '216',
+          'D': '226'
+        },
+        correct_answer: 'B',
+        explanation: 'An adult human body has 206 bones.',
+        points: 20,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 'mock-sci-3',
+        category_id: 'mock-cat-sci',
+        question_text: 'What gas do plants absorb from the atmosphere during photosynthesis?',
+        question_type: 'multiple_choice',
+        difficulty: 'easy',
+        options: {
+          'A': 'Oxygen',
+          'B': 'Nitrogen',
+          'C': 'Carbon Dioxide',
+          'D': 'Hydrogen'
+        },
+        correct_answer: 'C',
+        explanation: 'Plants absorb carbon dioxide and release oxygen during photosynthesis.',
+        points: 10,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ],
+    'History': [
+      {
+        id: 'mock-hist-1',
+        category_id: 'mock-cat-hist',
+        question_text: 'In which year did World War II end?',
+        question_type: 'multiple_choice',
+        difficulty: 'medium',
+        options: {
+          'A': '1944',
+          'B': '1945',
+          'C': '1946',
+          'D': '1947'
+        },
+        correct_answer: 'B',
+        explanation: 'World War II ended in 1945 with the surrender of Japan.',
+        points: 15,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 'mock-hist-2',
+        category_id: 'mock-cat-hist',
+        question_text: 'Who was the first person to walk on the moon?',
+        question_type: 'multiple_choice',
+        difficulty: 'easy',
+        options: {
+          'A': 'Buzz Aldrin',
+          'B': 'Neil Armstrong',
+          'C': 'John Glenn',
+          'D': 'Alan Shepard'
+        },
+        correct_answer: 'B',
+        explanation: 'Neil Armstrong was the first person to walk on the moon on July 20, 1969.',
+        points: 10,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ],
+    'Technology': [
+      {
+        id: 'mock-tech-1',
+        category_id: 'mock-cat-tech',
+        question_text: 'What does "HTML" stand for?',
+        question_type: 'multiple_choice',
+        difficulty: 'easy',
+        options: {
+          'A': 'Hyper Text Markup Language',
+          'B': 'High Tech Modern Language',
+          'C': 'Home Tool Markup Language',
+          'D': 'Hyperlink and Text Markup Language'
+        },
+        correct_answer: 'A',
+        explanation: 'HTML stands for Hyper Text Markup Language, used to create web pages.',
+        points: 10,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 'mock-tech-2',
+        category_id: 'mock-cat-tech',
+        question_text: 'Which company developed the iPhone?',
+        question_type: 'multiple_choice',
+        difficulty: 'easy',
+        options: {
+          'A': 'Samsung',
+          'B': 'Google',
+          'C': 'Apple',
+          'D': 'Microsoft'
+        },
+        correct_answer: 'C',
+        explanation: 'Apple developed and released the first iPhone in 2007.',
+        points: 10,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ],
+    'Sports': [
+      {
+        id: 'mock-sport-1',
+        category_id: 'mock-cat-sport',
+        question_text: 'How many players are on a basketball team on the court at one time?',
+        question_type: 'multiple_choice',
+        difficulty: 'easy',
+        options: {
+          'A': '4',
+          'B': '5',
+          'C': '6',
+          'D': '7'
+        },
+        correct_answer: 'B',
+        explanation: 'A basketball team has 5 players on the court at one time.',
+        points: 10,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 'mock-sport-2',
+        category_id: 'mock-cat-sport',
+        question_text: 'In which sport would you perform a slam dunk?',
+        question_type: 'multiple_choice',
+        difficulty: 'easy',
+        options: {
+          'A': 'Tennis',
+          'B': 'Basketball',
+          'C': 'Volleyball',
+          'D': 'Football'
+        },
+        correct_answer: 'B',
+        explanation: 'A slam dunk is a basketball move where a player scores by putting the ball directly through the hoop.',
+        points: 10,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ]
+  };
+
+  return mockQuestionsData[categoryName] || mockQuestionsData['General Knowledge'];
+};
+
+// Get mixed questions from all categories for instant quiz
+const getMixedQuestions = (): Question[] => {
+  const allQuestions: Question[] = [];
+  const categories = ['General Knowledge', 'Science', 'History', 'Technology', 'Sports'];
+  
+  // Get 2 questions from each category
+  categories.forEach(category => {
+    const categoryQuestions = getMockQuestions(category);
+    allQuestions.push(...categoryQuestions.slice(0, 2));
+  });
+  
+  // Shuffle the questions
+  for (let i = allQuestions.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
+  }
+  
+  return allQuestions.slice(0, 8); // Return 8 mixed questions
+};
+
 function QuizContent() {
   const { user } = useAuth();
   const router = useRouter();
@@ -24,6 +278,7 @@ function QuizContent() {
   // Get URL parameters
   const sessionCode = searchParams.get('session');
   const categoryName = searchParams.get('category');
+  const quizMode = searchParams.get('mode'); // 'instant' for immediate mixed quiz
   
   // Quiz state
   const [session, setSession] = useState<QuizSession | null>(null);
@@ -47,7 +302,7 @@ function QuizContent() {
 
   useEffect(() => {
     initializeQuiz();
-  }, [sessionCode, categoryName]);
+  }, [sessionCode, categoryName, quizMode]);
 
   useEffect(() => {
     if (isQuizStarted && timeLeft > 0 && !isQuizCompleted) {
@@ -65,10 +320,45 @@ function QuizContent() {
     setError('');
 
     try {
+      // Handle instant quiz mode
+      if (quizMode === 'instant') {
+        console.log('Starting instant mixed quiz');
+        const mixedQuestions = getMixedQuestions();
+        setQuestions(mixedQuestions);
+        setTimeLeft(30);
+        setLoading(false);
+        return;
+      }
+
       // Check if we need to show category selection
       if (!sessionCode && !categoryName) {
-        const categories = await getCategories();
-        setAvailableCategories(categories);
+        try {
+          const categories = await getCategories();
+          if (categories.length === 0) {
+            // If no categories in database, use default categories from homepage
+            console.log('No categories found in database, using default categories');
+            const defaultCategories = [
+              { id: 'mock-gk', name: 'General Knowledge', icon: '🎯', color: 'bg-green-100 border-green-200 hover:bg-green-200', icon_bg: 'bg-green-500', description: 'Mixed questions from various topics' },
+              { id: 'mock-sci', name: 'Science', icon: '🧪', color: 'bg-blue-100 border-blue-200 hover:bg-blue-200', icon_bg: 'bg-blue-500', description: 'Biology, Chemistry, Physics and more' },
+              { id: 'mock-hist', name: 'History', icon: '🏛️', color: 'bg-orange-100 border-orange-200 hover:bg-orange-200', icon_bg: 'bg-orange-500', description: 'World history and civilizations' },
+              { id: 'mock-sport', name: 'Sports', icon: '⚽', color: 'bg-red-100 border-red-200 hover:bg-red-200', icon_bg: 'bg-red-500', description: 'Sports, games and athletics' },
+              { id: 'mock-tech', name: 'Technology', icon: '💻', color: 'bg-purple-100 border-purple-200 hover:bg-purple-200', icon_bg: 'bg-purple-500', description: 'Computers, programming and tech' }
+            ];
+            setAvailableCategories(defaultCategories);
+          } else {
+            setAvailableCategories(categories);
+          }
+        } catch (error) {
+          console.log('Database error, using default categories:', error);
+          const defaultCategories = [
+            { id: 'mock-gk', name: 'General Knowledge', icon: '🎯', color: 'bg-green-100 border-green-200 hover:bg-green-200', icon_bg: 'bg-green-500', description: 'Mixed questions from various topics' },
+            { id: 'mock-sci', name: 'Science', icon: '🧪', color: 'bg-blue-100 border-blue-200 hover:bg-blue-200', icon_bg: 'bg-blue-500', description: 'Biology, Chemistry, Physics and more' },
+            { id: 'mock-hist', name: 'History', icon: '🏛️', color: 'bg-orange-100 border-orange-200 hover:bg-orange-200', icon_bg: 'bg-orange-500', description: 'World history and civilizations' },
+            { id: 'mock-sport', name: 'Sports', icon: '⚽', color: 'bg-red-100 border-red-200 hover:bg-red-200', icon_bg: 'bg-red-500', description: 'Sports, games and athletics' },
+            { id: 'mock-tech', name: 'Technology', icon: '💻', color: 'bg-purple-100 border-purple-200 hover:bg-purple-200', icon_bg: 'bg-purple-500', description: 'Computers, programming and tech' }
+          ];
+          setAvailableCategories(defaultCategories);
+        }
         setShowCategorySelection(true);
         setLoading(false);
         return;
@@ -105,25 +395,35 @@ function QuizContent() {
         setTimeLeft(sessionData.time_limit || 30);
       } else if (categoryName) {
         // Regular category-based quiz
-        const categories = await getCategories();
-        const category = categories.find(c => c.name === categoryName);
-        
-        if (!category) {
-          setError('Category not found.');
-          setLoading(false);
-          return;
+        try {
+          const categories = await getCategories();
+          const category = categories.find(c => c.name === categoryName);
+          
+          if (!category) {
+            // If category not found in database, create a mock category and use mock questions
+            console.log('Category not found in database, using mock data for:', categoryName);
+            const mockQuestions = getMockQuestions(categoryName);
+            setQuestions(mockQuestions);
+            setTimeLeft(30);
+          } else {
+            // Get random questions from the category
+            const categoryQuestions = await getRandomQuestions(category.id, 10);
+            if (categoryQuestions.length === 0) {
+              // If no questions found in database, use mock data
+              console.log('No questions found in database, using mock data for category:', categoryName);
+              const mockQuestions = getMockQuestions(categoryName);
+              setQuestions(mockQuestions);
+            } else {
+              setQuestions(categoryQuestions);
+            }
+            setTimeLeft(30); // Default time for regular quiz
+          }
+        } catch (error) {
+          console.log('Database error, falling back to mock data:', error);
+          const mockQuestions = getMockQuestions(categoryName);
+          setQuestions(mockQuestions);
+          setTimeLeft(30);
         }
-
-        // Get random questions from the category
-        const categoryQuestions = await getRandomQuestions(category.id, 10);
-        if (categoryQuestions.length === 0) {
-          setError('No questions found for this category.');
-          setLoading(false);
-          return;
-        }
-
-        setQuestions(categoryQuestions);
-        setTimeLeft(30); // Default time for regular quiz
       } else {
         setError('No session code or category specified.');
         setLoading(false);
@@ -418,8 +718,12 @@ function QuizContent() {
             </div>
           ) : (
             <div className="mb-6 p-4 bg-blue-50 rounded-lg">
-              <h3 className="font-bold text-blue-800">{categoryName} Quiz</h3>
-              <p className="text-sm text-blue-600">Practice Mode</p>
+              <h3 className="font-bold text-blue-800">
+                {quizMode === 'instant' ? 'Mixed Quiz' : `${categoryName} Quiz`}
+              </h3>
+              <p className="text-sm text-blue-600">
+                {quizMode === 'instant' ? 'Questions from all categories' : 'Practice Mode'}
+              </p>
             </div>
           )}
           
@@ -460,7 +764,8 @@ function QuizContent() {
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-xl font-bold text-gray-800">
-                {session ? `${session.title} - ${session.session_code}` : `${categoryName} Quiz`}
+                {session ? `${session.title} - ${session.session_code}` : 
+                 quizMode === 'instant' ? 'Mixed Quiz' : `${categoryName} Quiz`}
               </h1>
               <div className="flex items-center gap-4 mt-1">
                 <span className="text-sm text-gray-600">

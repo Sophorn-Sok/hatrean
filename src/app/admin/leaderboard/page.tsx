@@ -306,3 +306,11 @@ function LeaderboardPageContent() {
     </div>
   );
 }
+
+export default function LeaderboardPage() {
+  return (
+    <ProtectedRoute>
+      <LeaderboardPageContent />
+    </ProtectedRoute>
+  );
+}
