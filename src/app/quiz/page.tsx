@@ -9,6 +9,8 @@ import {
   getSessionQuestions, 
   joinSessionAsParticipant, 
   submitSessionQuizAttempt,
+  saveQuizAttempt,
+  updateUserQuizStats,
   getRandomQuestions,
   getCategories,
   Question,
@@ -266,6 +268,53 @@ function QuizContent() {
           correctAnswers,
           timeTaken
         );
+      } else {
+        // Save regular quiz attempt (instant quiz or category-based quiz)
+        const quizAttemptData = {
+          user_id: user.id,
+          session_id: undefined, // Not a session-based quiz
+          category_id: undefined, // We can set this later if needed
+          questions_data: {
+            answers: userAnswers,
+            questions: questions.map(q => ({
+              id: q.id,
+              question_text: q.question_text,
+              correct_answer: q.correct_answer,
+              user_answer: userAnswers[q.id] || null,
+              is_correct: userAnswers[q.id] === q.correct_answer,
+              points_earned: userAnswers[q.id] === q.correct_answer ? q.points : 0
+            })),
+            quiz_type: quizMode === 'instant' ? 'mixed' : 'category',
+            category_name: categoryName || 'Mixed Categories'
+          },
+          score,
+          total_questions: questions.length,
+          correct_answers: correctAnswers,
+          time_taken: timeTaken,
+          completed_at: new Date().toISOString()
+        };
+
+        const savedAttempt = await saveQuizAttempt(quizAttemptData);
+        
+        if (savedAttempt) {
+          console.log('Quiz attempt saved successfully:', savedAttempt);
+          
+          // Update user's total score and quiz count
+          const updatedStats = await updateUserQuizStats(user.id, score);
+          if (updatedStats) {
+            console.log('User stats updated successfully:', updatedStats);
+          }
+        } else {
+          console.error('Failed to save quiz attempt');
+        }
+      }
+      
+      // For session-based quizzes, also update user stats
+      if (session) {
+        const updatedStats = await updateUserQuizStats(user.id, score);
+        if (updatedStats) {
+          console.log('User stats updated for session quiz:', updatedStats);
+        }
       }
     } catch (error) {
       console.error('Error submitting quiz:', error);
@@ -457,9 +506,14 @@ function QuizContent() {
                 Back to Homepage
               </button>
             </Link>
+            <Link href="/profile">
+              <button className="w-full bg-blue-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-600 transition-colors">
+                View Profile & History
+              </button>
+            </Link>
             {session && (
               <Link href={`/admin/sessions`}>
-                <button className="w-full bg-blue-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-600 transition-colors">
+                <button className="w-full bg-green-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-600 transition-colors">
                   View Session Results
                 </button>
               </Link>

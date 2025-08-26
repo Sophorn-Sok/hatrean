@@ -171,6 +171,29 @@ export const makeUserAdmin = async (userId: string) => {
   return updateUserProfile(userId, { role: 'admin' });
 };
 
+// Update user quiz statistics
+export const updateUserQuizStats = async (userId: string, score: number) => {
+  try {
+    // Get current user profile
+    const currentProfile = await getUserProfile(userId);
+    if (!currentProfile) {
+      console.error('User profile not found');
+      return null;
+    }
+
+    // Update total score and quiz count
+    const updatedProfile = await updateUserProfile(userId, {
+      total_score: currentProfile.total_score + score,
+      total_quizzes: currentProfile.total_quizzes + 1
+    });
+
+    return updatedProfile;
+  } catch (error) {
+    console.error('Error updating user quiz stats:', error);
+    return null;
+  }
+};
+
 // Category Functions
 export const getCategories = async (): Promise<Category[]> => {
   const { data, error } = await supabase

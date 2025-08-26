@@ -1,14 +1,41 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../../../contexts/AuthContext';
 import ProtectedRoute from '../../../components/ProtectedRoute';
+import { getLeaderboard } from '../../lib/database';
+
+interface TopPlayer {
+  id: string;
+  username: string;
+  full_name: string;
+  total_score: number;
+  total_quizzes: number;
+}
 
 function HomePageContent() {
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [sessionCode, setSessionCode] = useState<string>('');
+  const [topPlayers, setTopPlayers] = useState<TopPlayer[]>([]);
+  const [loadingLeaderboard, setLoadingLeaderboard] = useState(true);
   const { user, signOut } = useAuth();
+
+  useEffect(() => {
+    loadTopPlayers();
+  }, []);
+
+  const loadTopPlayers = async () => {
+    try {
+      setLoadingLeaderboard(true);
+      const leaderboardData = await getLeaderboard(undefined, 3); // Get top 3 players
+      setTopPlayers(leaderboardData as TopPlayer[]);
+    } catch (error) {
+      console.error('Error loading top players:', error);
+    } finally {
+      setLoadingLeaderboard(false);
+    }
+  };
 
   const handleLogout = async () => {
     await signOut();
@@ -67,6 +94,9 @@ function HomePageContent() {
           <nav className="flex items-center gap-8">
             <Link href="/homepage" className="flex items-center gap-2 text-purple-600 font-medium">
               🏠 Home
+            </Link>
+            <Link href="/profile" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium">
+              👤 Profile
             </Link>
             <Link href="/admin/leaderboard" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium">
               📊 Leaderboard
@@ -207,23 +237,91 @@ function HomePageContent() {
             {/* Leaderboard */}
             <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-2xl font-bold text-gray-800">LeaderBoard</h3>
+                <h3 className="text-2xl font-bold text-gray-800">🏆 Top Champions</h3>
                 <Link href="/admin/leaderboard">
                   <button className="text-purple-600 hover:text-purple-700 font-medium text-sm">
                     View All →
                   </button>
                 </Link>
               </div>
-              <div className="text-center text-gray-500 py-8">
-                <div className="text-6xl mb-4">🏆</div>
-                <p className="text-lg mb-2">No data available yet</p>
-                <p className="text-sm mb-4">Start playing to see rankings!</p>
-                <Link href="/admin/leaderboard">
-                  <button className="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors">
-                    View Leaderboard
-                  </button>
-                </Link>
-              </div>
+              
+              {loadingLeaderboard ? (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
+                  <p className="text-gray-500">Loading top players...</p>
+                </div>
+              ) : topPlayers.length > 0 ? (
+                <div className="space-y-4">
+                  {topPlayers.map((player, index) => (
+                    <div 
+                      key={player.id} 
+                      className={`flex items-center gap-4 p-4 rounded-2xl transition-all hover:scale-[1.02] ${
+                        index === 0 
+                          ? 'bg-gradient-to-r from-yellow-100 to-amber-100 border-2 border-yellow-300' 
+                          : index === 1 
+                          ? 'bg-gradient-to-r from-gray-100 to-slate-100 border-2 border-gray-300'
+                          : 'bg-gradient-to-r from-orange-100 to-amber-100 border-2 border-orange-300'
+                      }`}
+                    >
+                      {/* Rank Badge */}
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg ${
+                        index === 0 
+                          ? 'bg-yellow-500 text-white' 
+                          : index === 1 
+                          ? 'bg-gray-500 text-white'
+                          : 'bg-orange-500 text-white'
+                      }`}>
+                        {index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'}
+                      </div>
+                      
+                      {/* Player Info */}
+                      <div className="flex-1">
+                        <h4 className="font-bold text-gray-800 text-lg">
+                          {player.username || player.full_name || 'Unknown Player'}
+                        </h4>
+                        <div className="flex items-center gap-4 text-sm text-gray-600">
+                          <span className="flex items-center gap-1">
+                            <span className="text-green-600">⭐</span>
+                            {player.total_score} points
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <span className="text-blue-600">📝</span>
+                            {player.total_quizzes} quizzes
+                          </span>
+                        </div>
+                      </div>
+                      
+                      {/* Average Score */}
+                      <div className="text-right">
+                        <div className="text-lg font-bold text-gray-800">
+                          {player.total_quizzes > 0 ? Math.round(player.total_score / player.total_quizzes) : 0}%
+                        </div>
+                        <div className="text-xs text-gray-500">avg score</div>
+                      </div>
+                    </div>
+                  ))}
+                  
+                  {/* View All Button */}
+                  <div className="pt-4 border-t border-gray-200">
+                    <Link href="/admin/leaderboard">
+                      <button className="w-full py-3 text-purple-600 hover:text-purple-700 font-medium hover:bg-purple-50 rounded-xl transition-colors">
+                        View Complete Leaderboard 📊
+                      </button>
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center text-gray-500 py-8">
+                  <div className="text-6xl mb-4">🏆</div>
+                  <p className="text-lg mb-2">No champions yet!</p>
+                  <p className="text-sm mb-4">Be the first to take a quiz and claim the top spot!</p>
+                  <Link href="/quiz?mode=instant">
+                    <button className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                      Start First Quiz 🚀
+                    </button>
+                  </Link>
+                </div>
+              )}
             </div>
 
             {/* Quiz Features */}
