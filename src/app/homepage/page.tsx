@@ -131,11 +131,25 @@ function HomePageContent() {
             {/* Start Quiz Card */}
             <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-3xl p-8 text-white shadow-lg hover:shadow-xl transition-shadow">
               <h3 className="text-2xl font-bold mb-3">Start Your Quiz Adventure!</h3>
-              <p className="text-purple-100 mb-8 text-lg">Test your knowledge and have fun while learning! 🧠</p>
+              <p className="text-purple-100 mb-6 text-lg">Test your knowledge with 10 randomized questions! 🧠</p>
+              <div className="space-y-3 mb-8 text-purple-100">
+                <div className="flex items-center gap-2">
+                  <span>📝</span>
+                  <span>10 questions per session</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>🎲</span>
+                  <span>Random questions from 50+ database</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>💡</span>
+                  <span>See correct answers & explanations</span>
+                </div>
+              </div>
               
               <Link href="/quiz?mode=instant">
                 <button className="w-full px-8 py-4 bg-white text-purple-600 rounded-2xl font-semibold hover:bg-purple-50 transition-all transform hover:scale-105 shadow-lg">
-                  Start Quiz 🚀
+                  Start Random Quiz 🚀
                 </button>
               </Link>
             </div>
@@ -217,24 +231,24 @@ function HomePageContent() {
               <h3 className="text-xl font-bold text-gray-800 mb-6">📚 Quiz Features</h3>
               <div className="space-y-5">
                 <div className="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-50 transition-colors">
-                  <span className="text-blue-500 text-xl">🕐</span>
-                  <span className="text-gray-700 font-medium">Time Challenges</span>
+                  <span className="text-blue-500 text-xl">🎲</span>
+                  <span className="text-gray-700 font-medium">50+ randomized questions</span>
                 </div>
                 <div className="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-50 transition-colors">
-                  <span className="text-green-500 text-xl">🎲</span>
-                  <span className="text-gray-700 font-medium">Randomized questions</span>
+                  <span className="text-green-500 text-xl">📝</span>
+                  <span className="text-gray-700 font-medium">10 questions per session</span>
                 </div>
                 <div className="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-50 transition-colors">
-                  <span className="text-purple-500 text-xl">📈</span>
-                  <span className="text-gray-700 font-medium">Track your progress</span>
+                  <span className="text-purple-500 text-xl">�</span>
+                  <span className="text-gray-700 font-medium">Instant answer explanations</span>
                 </div>
                 <div className="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-50 transition-colors">
                   <span className="text-orange-500 text-xl">🏆</span>
-                  <span className="text-gray-700 font-medium">Earn achievements</span>
+                  <span className="text-gray-700 font-medium">Points & achievements</span>
                 </div>
                 <div className="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-50 transition-colors">
-                  <span className="text-red-500 text-xl">👥</span>
-                  <span className="text-gray-700 font-medium">Join live sessions</span>
+                  <span className="text-red-500 text-xl">⏱️</span>
+                  <span className="text-gray-700 font-medium">Timed challenges</span>
                 </div>
               </div>
             </div>
@@ -247,7 +261,7 @@ function HomePageContent() {
         {/* Explore Categories */}
         <section className="text-center">
           <h3 className="text-4xl font-bold text-gray-800 mb-4">Choose Your Category 📚</h3>
-          <p className="text-lg text-gray-600 mb-12">Click on a category to select it and start your quiz!</p>
+          <p className="text-lg text-gray-600 mb-12">Select a category for 10 focused questions with instant feedback!</p>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {categories.map((category, index) => (
               <div

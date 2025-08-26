@@ -14,261 +14,13 @@ import {
   Question,
   QuizSession
 } from '../../lib/database';
+import { 
+  getRandomQuestions as getRandomQuizQuestions,
+  getQuestionsByCategory,
+  getMixedQuestions as getMixedQuizQuestions,
+  QuizQuestion 
+} from '../../lib/quizData';
 import Link from 'next/link';
-
-// Mock data for testing when database is empty
-const getMockQuestions = (categoryName: string): Question[] => {
-  const mockQuestionsData: Record<string, Question[]> = {
-    'General Knowledge': [
-      {
-        id: 'mock-gk-1',
-        category_id: 'mock-cat-gk',
-        question_text: 'What is the capital of France?',
-        question_type: 'multiple_choice',
-        difficulty: 'easy',
-        options: {
-          'A': 'London',
-          'B': 'Berlin',
-          'C': 'Paris',
-          'D': 'Madrid'
-        },
-        correct_answer: 'C',
-        explanation: 'Paris is the capital and largest city of France.',
-        points: 10,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      },
-      {
-        id: 'mock-gk-2',
-        category_id: 'mock-cat-gk',
-        question_text: 'Which planet is known as the Red Planet?',
-        question_type: 'multiple_choice',
-        difficulty: 'medium',
-        options: {
-          'A': 'Venus',
-          'B': 'Mars',
-          'C': 'Jupiter',
-          'D': 'Saturn'
-        },
-        correct_answer: 'B',
-        explanation: 'Mars is called the Red Planet due to its reddish appearance.',
-        points: 15,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      },
-      {
-        id: 'mock-gk-3',
-        category_id: 'mock-cat-gk',
-        question_text: 'What is the largest ocean on Earth?',
-        question_type: 'multiple_choice',
-        difficulty: 'easy',
-        options: {
-          'A': 'Atlantic Ocean',
-          'B': 'Indian Ocean',
-          'C': 'Arctic Ocean',
-          'D': 'Pacific Ocean'
-        },
-        correct_answer: 'D',
-        explanation: 'The Pacific Ocean is the largest ocean covering about 1/3 of Earth\'s surface.',
-        points: 10,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      }
-    ],
-    'Science': [
-      {
-        id: 'mock-sci-1',
-        category_id: 'mock-cat-sci',
-        question_text: 'What is the chemical symbol for gold?',
-        question_type: 'multiple_choice',
-        difficulty: 'medium',
-        options: {
-          'A': 'Go',
-          'B': 'Gd',
-          'C': 'Au',
-          'D': 'Ag'
-        },
-        correct_answer: 'C',
-        explanation: 'Au comes from the Latin word "aurum" meaning gold.',
-        points: 15,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      },
-      {
-        id: 'mock-sci-2',
-        category_id: 'mock-cat-sci',
-        question_text: 'How many bones are there in an adult human body?',
-        question_type: 'multiple_choice',
-        difficulty: 'hard',
-        options: {
-          'A': '196',
-          'B': '206',
-          'C': '216',
-          'D': '226'
-        },
-        correct_answer: 'B',
-        explanation: 'An adult human body has 206 bones.',
-        points: 20,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      },
-      {
-        id: 'mock-sci-3',
-        category_id: 'mock-cat-sci',
-        question_text: 'What gas do plants absorb from the atmosphere during photosynthesis?',
-        question_type: 'multiple_choice',
-        difficulty: 'easy',
-        options: {
-          'A': 'Oxygen',
-          'B': 'Nitrogen',
-          'C': 'Carbon Dioxide',
-          'D': 'Hydrogen'
-        },
-        correct_answer: 'C',
-        explanation: 'Plants absorb carbon dioxide and release oxygen during photosynthesis.',
-        points: 10,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      }
-    ],
-    'History': [
-      {
-        id: 'mock-hist-1',
-        category_id: 'mock-cat-hist',
-        question_text: 'In which year did World War II end?',
-        question_type: 'multiple_choice',
-        difficulty: 'medium',
-        options: {
-          'A': '1944',
-          'B': '1945',
-          'C': '1946',
-          'D': '1947'
-        },
-        correct_answer: 'B',
-        explanation: 'World War II ended in 1945 with the surrender of Japan.',
-        points: 15,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      },
-      {
-        id: 'mock-hist-2',
-        category_id: 'mock-cat-hist',
-        question_text: 'Who was the first person to walk on the moon?',
-        question_type: 'multiple_choice',
-        difficulty: 'easy',
-        options: {
-          'A': 'Buzz Aldrin',
-          'B': 'Neil Armstrong',
-          'C': 'John Glenn',
-          'D': 'Alan Shepard'
-        },
-        correct_answer: 'B',
-        explanation: 'Neil Armstrong was the first person to walk on the moon on July 20, 1969.',
-        points: 10,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      }
-    ],
-    'Technology': [
-      {
-        id: 'mock-tech-1',
-        category_id: 'mock-cat-tech',
-        question_text: 'What does "HTML" stand for?',
-        question_type: 'multiple_choice',
-        difficulty: 'easy',
-        options: {
-          'A': 'Hyper Text Markup Language',
-          'B': 'High Tech Modern Language',
-          'C': 'Home Tool Markup Language',
-          'D': 'Hyperlink and Text Markup Language'
-        },
-        correct_answer: 'A',
-        explanation: 'HTML stands for Hyper Text Markup Language, used to create web pages.',
-        points: 10,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      },
-      {
-        id: 'mock-tech-2',
-        category_id: 'mock-cat-tech',
-        question_text: 'Which company developed the iPhone?',
-        question_type: 'multiple_choice',
-        difficulty: 'easy',
-        options: {
-          'A': 'Samsung',
-          'B': 'Google',
-          'C': 'Apple',
-          'D': 'Microsoft'
-        },
-        correct_answer: 'C',
-        explanation: 'Apple developed and released the first iPhone in 2007.',
-        points: 10,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      }
-    ],
-    'Sports': [
-      {
-        id: 'mock-sport-1',
-        category_id: 'mock-cat-sport',
-        question_text: 'How many players are on a basketball team on the court at one time?',
-        question_type: 'multiple_choice',
-        difficulty: 'easy',
-        options: {
-          'A': '4',
-          'B': '5',
-          'C': '6',
-          'D': '7'
-        },
-        correct_answer: 'B',
-        explanation: 'A basketball team has 5 players on the court at one time.',
-        points: 10,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      },
-      {
-        id: 'mock-sport-2',
-        category_id: 'mock-cat-sport',
-        question_text: 'In which sport would you perform a slam dunk?',
-        question_type: 'multiple_choice',
-        difficulty: 'easy',
-        options: {
-          'A': 'Tennis',
-          'B': 'Basketball',
-          'C': 'Volleyball',
-          'D': 'Football'
-        },
-        correct_answer: 'B',
-        explanation: 'A slam dunk is a basketball move where a player scores by putting the ball directly through the hoop.',
-        points: 10,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      }
-    ]
-  };
-
-  return mockQuestionsData[categoryName] || mockQuestionsData['General Knowledge'];
-};
-
-// Get mixed questions from all categories for instant quiz
-const getMixedQuestions = (): Question[] => {
-  const allQuestions: Question[] = [];
-  const categories = ['General Knowledge', 'Science', 'History', 'Technology', 'Sports'];
-  
-  // Get 2 questions from each category
-  categories.forEach(category => {
-    const categoryQuestions = getMockQuestions(category);
-    allQuestions.push(...categoryQuestions.slice(0, 2));
-  });
-  
-  // Shuffle the questions
-  for (let i = allQuestions.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
-  }
-  
-  return allQuestions.slice(0, 8); // Return 8 mixed questions
-};
 
 function QuizContent() {
   const { user } = useAuth();
@@ -282,7 +34,7 @@ function QuizContent() {
   
   // Quiz state
   const [session, setSession] = useState<QuizSession | null>(null);
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string>('');
   const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
@@ -294,6 +46,8 @@ function QuizContent() {
   const [score, setScore] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [startTime, setStartTime] = useState<Date | null>(null);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
   
   // Category selection state
   const [showCategorySelection, setShowCategorySelection] = useState(false);
@@ -305,13 +59,20 @@ function QuizContent() {
   }, [sessionCode, categoryName, quizMode]);
 
   useEffect(() => {
-    if (isQuizStarted && timeLeft > 0 && !isQuizCompleted) {
+    if (isQuizStarted && timeLeft > 0 && !isQuizCompleted && !isAnswerSubmitted) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
       return () => clearTimeout(timer);
-    } else if (timeLeft === 0 && isQuizStarted) {
-      handleNextQuestion(); // Auto-submit when time runs out
+    } else if (timeLeft === 0 && isQuizStarted && !isAnswerSubmitted) {
+      // Auto-submit when time runs out
+      if (selectedAnswer) {
+        handleSubmitAnswer();
+      } else {
+        // If no answer selected, mark as wrong and show correct answer
+        setIsAnswerSubmitted(true);
+        setShowAnswer(true);
+      }
     }
-  }, [timeLeft, isQuizStarted, isQuizCompleted]);
+  }, [timeLeft, isQuizStarted, isQuizCompleted, isAnswerSubmitted, selectedAnswer]);
 
   const initializeQuiz = async () => {
     if (!user) return;
@@ -320,10 +81,10 @@ function QuizContent() {
     setError('');
 
     try {
-      // Handle instant quiz mode
+      // Handle instant quiz mode - always use new quiz data with 10 random questions
       if (quizMode === 'instant') {
-        console.log('Starting instant mixed quiz');
-        const mixedQuestions = getMixedQuestions();
+        console.log('Starting instant mixed quiz with 10 questions');
+        const mixedQuestions = getMixedQuizQuestions(10);
         setQuestions(mixedQuestions);
         setTimeLeft(30);
         setLoading(false);
@@ -390,40 +151,33 @@ function QuizContent() {
           return;
         }
 
+        // Convert to QuizQuestion format and limit to 10
+        const convertedQuestions: QuizQuestion[] = sessionQuestions.slice(0, 10).map(q => ({
+          id: q.id,
+          category: 'Session',
+          question_text: q.question_text,
+          options: q.options as Record<string, string>,
+          correct_answer: q.correct_answer,
+          explanation: q.explanation || 'No explanation provided.',
+          difficulty: q.difficulty,
+          points: q.points
+        }));
+
         setSession(sessionData);
-        setQuestions(sessionQuestions);
+        setQuestions(convertedQuestions);
         setTimeLeft(sessionData.time_limit || 30);
       } else if (categoryName) {
-        // Regular category-based quiz
-        try {
-          const categories = await getCategories();
-          const category = categories.find(c => c.name === categoryName);
-          
-          if (!category) {
-            // If category not found in database, create a mock category and use mock questions
-            console.log('Category not found in database, using mock data for:', categoryName);
-            const mockQuestions = getMockQuestions(categoryName);
-            setQuestions(mockQuestions);
-            setTimeLeft(30);
-          } else {
-            // Get random questions from the category
-            const categoryQuestions = await getRandomQuestions(category.id, 10);
-            if (categoryQuestions.length === 0) {
-              // If no questions found in database, use mock data
-              console.log('No questions found in database, using mock data for category:', categoryName);
-              const mockQuestions = getMockQuestions(categoryName);
-              setQuestions(mockQuestions);
-            } else {
-              setQuestions(categoryQuestions);
-            }
-            setTimeLeft(30); // Default time for regular quiz
-          }
-        } catch (error) {
-          console.log('Database error, falling back to mock data:', error);
-          const mockQuestions = getMockQuestions(categoryName);
-          setQuestions(mockQuestions);
-          setTimeLeft(30);
+        // Category-based quiz - always use new quiz data with 10 questions
+        console.log('Starting category quiz for:', categoryName);
+        const categoryQuestions = getQuestionsByCategory(categoryName, 10);
+        if (categoryQuestions.length === 0) {
+          // Fallback to mixed questions if category not found
+          const mixedQuestions = getMixedQuizQuestions(10);
+          setQuestions(mixedQuestions);
+        } else {
+          setQuestions(categoryQuestions);
         }
+        setTimeLeft(30);
       } else {
         setError('No session code or category specified.');
         setLoading(false);
@@ -450,27 +204,42 @@ function QuizContent() {
   };
 
   const handleAnswerSelect = (answer: string) => {
-    setSelectedAnswer(answer);
+    if (!isAnswerSubmitted) {
+      setSelectedAnswer(answer);
+    }
+  };
+
+  const handleSubmitAnswer = () => {
+    if (!selectedAnswer) return;
+    
+    setIsAnswerSubmitted(true);
+    setShowAnswer(true);
+    
+    // Save the answer
+    const newAnswers = { ...userAnswers };
+    newAnswers[questions[currentQuestion].id] = selectedAnswer;
+    setUserAnswers(newAnswers);
+    
+    // Check if answer is correct
+    if (selectedAnswer === questions[currentQuestion].correct_answer) {
+      setCorrectAnswers(prev => prev + 1);
+      setScore(prev => prev + (questions[currentQuestion].points || 10));
+    }
   };
 
   const handleNextQuestion = () => {
-    // Save the answer
-    if (selectedAnswer) {
-      const newAnswers = { ...userAnswers };
-      newAnswers[questions[currentQuestion].id] = selectedAnswer;
-      setUserAnswers(newAnswers);
-      
-      // Check if answer is correct
-      if (selectedAnswer === questions[currentQuestion].correct_answer) {
-        setCorrectAnswers(prev => prev + 1);
-        setScore(prev => prev + (questions[currentQuestion].points || 10));
-      }
+    // If answer hasn't been submitted yet, submit it
+    if (!isAnswerSubmitted) {
+      handleSubmitAnswer();
+      return;
     }
 
     // Move to next question or finish quiz
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
       setSelectedAnswer('');
+      setShowAnswer(false);
+      setIsAnswerSubmitted(false);
       setTimeLeft(session?.time_limit || 30); // Reset timer for next question
     } else {
       finishQuiz();
@@ -730,7 +499,7 @@ function QuizContent() {
           <div className="space-y-3 mb-6 text-left">
             <p className="flex items-center gap-2">
               <span className="text-blue-500">📝</span>
-              <span>{questions.length} questions</span>
+              <span>10 questions per session</span>
             </p>
             <p className="flex items-center gap-2">
               <span className="text-green-500">⏱️</span>
@@ -738,7 +507,11 @@ function QuizContent() {
             </p>
             <p className="flex items-center gap-2">
               <span className="text-purple-500">🎯</span>
-              <span>Answer as many as you can!</span>
+              <span>Answer and see explanations!</span>
+            </p>
+            <p className="flex items-center gap-2">
+              <span className="text-orange-500">🏆</span>
+              <span>Earn points for correct answers!</span>
             </p>
           </div>
           
@@ -812,21 +585,66 @@ function QuizContent() {
 
           {/* Options */}
           <div className="space-y-4 mb-8">
-            {Object.entries(currentQ.options as Record<string, string>).map(([key, value]) => (
-              <button
-                key={key}
-                onClick={() => handleAnswerSelect(key)}
-                className={`w-full p-4 text-left rounded-xl border-2 transition-all ${
-                  selectedAnswer === key
-                    ? 'border-purple-500 bg-purple-50 text-purple-800'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                }`}
-              >
-                <span className="font-semibold mr-3">{key}.</span>
-                {value}
-              </button>
-            ))}
+            {Object.entries(currentQ.options as Record<string, string>).map(([key, value]) => {
+              let buttonClass = `w-full p-4 text-left rounded-xl border-2 transition-all `;
+              
+              if (showAnswer) {
+                // Show correct/incorrect after answer is submitted
+                if (key === currentQ.correct_answer) {
+                  buttonClass += 'border-green-500 bg-green-50 text-green-800';
+                } else if (key === selectedAnswer && key !== currentQ.correct_answer) {
+                  buttonClass += 'border-red-500 bg-red-50 text-red-800';
+                } else {
+                  buttonClass += 'border-gray-200 bg-gray-50 text-gray-600';
+                }
+              } else {
+                // Normal state before answer submission
+                if (selectedAnswer === key) {
+                  buttonClass += 'border-purple-500 bg-purple-50 text-purple-800';
+                } else {
+                  buttonClass += 'border-gray-200 hover:border-gray-300 hover:bg-gray-50';
+                }
+              }
+              
+              return (
+                <button
+                  key={key}
+                  onClick={() => handleAnswerSelect(key)}
+                  disabled={isAnswerSubmitted}
+                  className={buttonClass}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="font-semibold mr-3">{key}.</span>
+                      {value}
+                    </div>
+                    {showAnswer && key === currentQ.correct_answer && (
+                      <span className="text-green-600 font-bold">✓ Correct</span>
+                    )}
+                    {showAnswer && key === selectedAnswer && key !== currentQ.correct_answer && (
+                      <span className="text-red-600 font-bold">✗ Wrong</span>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
           </div>
+
+          {/* Show explanation after answer is submitted */}
+          {showAnswer && (
+            <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+              <h4 className="font-semibold text-blue-800 mb-2">💡 Explanation:</h4>
+              <p className="text-blue-700">{currentQ.explanation}</p>
+              <div className="mt-3 flex items-center gap-4 text-sm">
+                <span className={`font-medium ${selectedAnswer === currentQ.correct_answer ? 'text-green-600' : 'text-red-600'}`}>
+                  {selectedAnswer === currentQ.correct_answer ? '🎉 Correct!' : '❌ Incorrect'}
+                </span>
+                {selectedAnswer === currentQ.correct_answer && (
+                  <span className="text-purple-600">+{currentQ.points} points</span>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Actions */}
           <div className="flex justify-between items-center">
@@ -837,17 +655,26 @@ function QuizContent() {
               Exit Quiz
             </button>
             
-            <button
-              onClick={handleNextQuestion}
-              disabled={!selectedAnswer}
-              className={`px-8 py-3 rounded-xl font-semibold transition-all ${
-                selectedAnswer
-                  ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700'
-                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-              }`}
-            >
-              {currentQuestion === questions.length - 1 ? 'Finish Quiz' : 'Next Question'} →
-            </button>
+            {!isAnswerSubmitted ? (
+              <button
+                onClick={handleSubmitAnswer}
+                disabled={!selectedAnswer}
+                className={`px-8 py-3 rounded-xl font-semibold transition-all ${
+                  selectedAnswer
+                    ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800'
+                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                }`}
+              >
+                Submit Answer 📝
+              </button>
+            ) : (
+              <button
+                onClick={handleNextQuestion}
+                className="px-8 py-3 rounded-xl font-semibold transition-all bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700"
+              >
+                {currentQuestion === questions.length - 1 ? 'Finish Quiz' : 'Next Question'} →
+              </button>
+            )}
           </div>
         </div>
       </main>
