@@ -108,9 +108,7 @@ function HomePageContent() {
             <Link href="/admin/leaderboard" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium">
               📊 Leaderboard
             </Link>
-            <Link href="/admin" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium">
-              ⚙️ Admin
-            </Link>
+            
           </nav>
 
           <div className="flex items-center gap-4">
