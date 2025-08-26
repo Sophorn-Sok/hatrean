@@ -133,9 +133,9 @@ function HomePageContent() {
               <h3 className="text-2xl font-bold mb-3">Start Your Quiz Adventure!</h3>
               <p className="text-purple-100 mb-8 text-lg">Test your knowledge and have fun while learning! 🧠</p>
               
-              <Link href="/quiz">
+              <Link href="/quiz?mode=instant">
                 <button className="w-full px-8 py-4 bg-white text-purple-600 rounded-2xl font-semibold hover:bg-purple-50 transition-all transform hover:scale-105 shadow-lg">
-                  Start Quiz �
+                  Start Quiz 🚀
                 </button>
               </Link>
             </div>
@@ -163,18 +163,14 @@ function HomePageContent() {
                 </div>
 
                 {/* Session Action Button */}
-                {sessionCode && selectedCategory ? (
+                {sessionCode ? (
                   <button 
                     onClick={() => {
-                      window.location.href = `/quiz?session=${sessionCode}&category=${encodeURIComponent(selectedCategory)}`;
+                      window.location.href = `/quiz?session=${sessionCode}`;
                     }}
                     className="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white py-4 rounded-2xl font-semibold hover:from-green-600 hover:to-emerald-600 transition-all transform hover:scale-[1.02]"
                   >
-                    Join Session: {sessionCode} ({selectedCategory}) 🎯
-                  </button>
-                ) : sessionCode && !selectedCategory ? (
-                  <button className="w-full bg-gradient-to-r from-gray-400 to-gray-500 text-white py-4 rounded-2xl font-semibold cursor-not-allowed">
-                    Select category first to join session: {sessionCode}
+                    Join Session: {sessionCode} 🎯
                   </button>
                 ) : (
                   <button className="w-full bg-gradient-to-r from-gray-200 to-gray-300 text-gray-600 py-4 rounded-2xl font-semibold cursor-not-allowed">
@@ -184,8 +180,7 @@ function HomePageContent() {
 
                 <div className="text-center pt-2">
                   <p className="text-xs text-gray-500">
-                    {sessionCode && selectedCategory ? '✅ Ready to join session' : 
-                     sessionCode && !selectedCategory ? '⚠️ Category required for session' : 
+                    {sessionCode ? '✅ Ready to join session' : 
                      '💡 Session codes are provided by your quiz admin'}
                   </p>
                 </div>
