@@ -63,14 +63,6 @@ export default function Home() {
             </div>
             <h1 className="text-2xl font-bold text-purple-700">Hat rean</h1>
           </div>
-          
-          <nav className="hidden md:flex items-center gap-8">
-            <Link href="#features" className="text-gray-700 hover:text-purple-600 transition-colors">Features</Link>
-            <Link href="#categories" className="text-gray-700 hover:text-purple-600 transition-colors">Categories</Link>
-            <Link href="#about" className="text-gray-700 hover:text-purple-600 transition-colors">About</Link>
-            <Link href="#contact" className="text-gray-700 hover:text-purple-600 transition-colors">Contact</Link>
-          </nav>
-
           <div className="flex gap-3">
             <Link href="/loginpage">
               <button className="px-6 py-2 border border-purple-300 text-purple-700 rounded-full hover:bg-purple-50 transition-colors">
@@ -100,14 +92,14 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-          <Link href="/signuppage">
+          <Link href="/homepage">
             <button className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-2xl font-semibold text-lg hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105">
               Start Your Journey 🚀
             </button>
           </Link>
-          <Link href="#features">
+          <Link href="/quiz">
             <button className="px-8 py-4 border-2 border-purple-300 text-purple-700 rounded-2xl font-semibold text-lg hover:bg-purple-50 transition-colors">
-              Learn More
+              Take Quiz Now 🎯
             </button>
           </Link>
         </div>
@@ -229,6 +221,50 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Quick Navigation */}
+      <section className="py-16 bg-white">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl font-bold text-gray-800 mb-4">Explore Hat rean</h3>
+            <p className="text-gray-600">Quick access to all platform features</p>
+          </div>
+          
+          <div className="grid md:grid-cols-4 gap-6">
+            <Link href="/quiz" className="group">
+              <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 text-center hover:shadow-lg transition-all group-hover:scale-105">
+                <div className="text-4xl mb-4">🎯</div>
+                <h4 className="font-bold text-gray-800 mb-2">Take Quiz</h4>
+                <p className="text-sm text-gray-600">Start testing your knowledge</p>
+              </div>
+            </Link>
+            
+            <Link href="/admin/leaderboard" className="group">
+              <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-2xl p-6 text-center hover:shadow-lg transition-all group-hover:scale-105">
+                <div className="text-4xl mb-4">🏆</div>
+                <h4 className="font-bold text-gray-800 mb-2">Leaderboard</h4>
+                <p className="text-sm text-gray-600">See top performers</p>
+              </div>
+            </Link>
+            
+            <Link href="/admin" className="group">
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 text-center hover:shadow-lg transition-all group-hover:scale-105">
+                <div className="text-4xl mb-4">⚙️</div>
+                <h4 className="font-bold text-gray-800 mb-2">Admin Panel</h4>
+                <p className="text-sm text-gray-600">Manage questions</p>
+              </div>
+            </Link>
+            
+            <Link href="/homepage" className="group">
+              <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 text-center hover:shadow-lg transition-all group-hover:scale-105">
+                <div className="text-4xl mb-4">🏠</div>
+                <h4 className="font-bold text-gray-800 mb-2">Dashboard</h4>
+                <p className="text-sm text-gray-600">Your home base</p>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
         <div className="max-w-4xl mx-auto px-6 text-center">
@@ -280,8 +316,8 @@ export default function Home() {
               <ul className="space-y-2 text-gray-400">
                 <li><Link href="/loginpage" className="hover:text-white transition-colors">Login</Link></li>
                 <li><Link href="/signuppage" className="hover:text-white transition-colors">Sign Up</Link></li>
-                <li><Link href="/profile" className="hover:text-white transition-colors">Profile</Link></li>
-                <li><Link href="/settings" className="hover:text-white transition-colors">Settings</Link></li>
+                <li><Link href="/homepage" className="hover:text-white transition-colors">Dashboard</Link></li>
+                <li><Link href="/admin" className="hover:text-white transition-colors">Admin Panel</Link></li>
               </ul>
             </div>
             <div>

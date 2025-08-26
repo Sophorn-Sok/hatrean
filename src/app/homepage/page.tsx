@@ -1,0 +1,317 @@
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+import { useAuth } from '../../../contexts/AuthContext';
+import ProtectedRoute from '../../../components/ProtectedRoute';
+
+function HomePageContent() {
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [sessionCode, setSessionCode] = useState<string>('');
+  const { user, signOut } = useAuth();
+
+  const handleLogout = async () => {
+    await signOut();
+  };
+
+  const categories = [
+    { 
+      name: 'General Knowledge', 
+      icon: '🎯', 
+      color: 'bg-green-100 border-green-200 hover:bg-green-200', 
+      iconBg: 'bg-green-500',
+      topics: 'Mixed questions from various topics' 
+    },
+    { 
+      name: 'Science', 
+      icon: '🧪', 
+      color: 'bg-blue-100 border-blue-200 hover:bg-blue-200', 
+      iconBg: 'bg-blue-500',
+      topics: 'Biology, Chemistry, Physics and more' 
+    },
+    { 
+      name: 'History', 
+      icon: '🏛️', 
+      color: 'bg-orange-100 border-orange-200 hover:bg-orange-200', 
+      iconBg: 'bg-orange-500',
+      topics: 'World history and civilizations' 
+    },
+    { 
+      name: 'Sports', 
+      icon: '⚽', 
+      color: 'bg-red-100 border-red-200 hover:bg-red-200', 
+      iconBg: 'bg-red-500',
+      topics: 'Sports, games and athletics' 
+    },
+    { 
+      name: 'Technology', 
+      icon: '💻', 
+      color: 'bg-purple-100 border-purple-200 hover:bg-purple-200', 
+      iconBg: 'bg-purple-500',
+      topics: 'Computers, programming and tech' 
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b border-gray-100">
+        <div className="max-w-7xl mx-auto flex justify-between items-center p-4 px-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
+              <span className="text-white font-bold text-lg">👑</span>
+            </div>
+            <h1 className="text-2xl font-bold text-purple-700">Hat rean</h1>
+          </div>
+          
+          <nav className="flex items-center gap-8">
+            <Link href="/homepage" className="flex items-center gap-2 text-purple-600 font-medium">
+              🏠 Home
+            </Link>
+            <Link href="/admin/leaderboard" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium">
+              📊 Leaderboard
+            </Link>
+            <Link href="/admin" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium">
+              ⚙️ Admin
+            </Link>
+          </nav>
+
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-gray-600">
+              Hi, {user?.user_metadata?.username || user?.email || 'User'}! 👋
+            </span>
+            <button 
+              onClick={handleLogout}
+              className="px-4 py-2 text-sm text-gray-600 hover:text-purple-600 transition-colors"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-6 py-8">
+        {/* Hero Section */}
+        <section className="text-center mb-12">
+          <h2 className="text-5xl md:text-6xl font-bold text-transparent bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text mb-4">
+            Ready to Quiz? 🚀
+          </h2>
+          <p className="text-xl text-gray-600 mb-12">
+            Test your knowledge and have fun while learning! 🧠✨
+          </p>
+
+          {/* Feature Icons */}
+          <div className="flex justify-center gap-12 mb-16">
+            <div className="flex flex-col items-center group">
+              <div className="w-20 h-20 bg-purple-200 rounded-3xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                <span className="text-3xl">⚡</span>
+              </div>
+              <span className="text-base font-semibold text-gray-700">Lightning fast</span>
+            </div>
+            <div className="flex flex-col items-center group">
+              <div className="w-20 h-20 bg-blue-200 rounded-3xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                <span className="text-3xl">✓</span>
+              </div>
+              <span className="text-base font-semibold text-gray-700">Super Accurate</span>
+            </div>
+            <div className="flex flex-col items-center group">
+              <div className="w-20 h-20 bg-green-200 rounded-3xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                <span className="text-3xl">⭐</span>
+              </div>
+              <span className="text-base font-semibold text-gray-700">Mega Fun</span>
+            </div>
+          </div>
+        </section>
+
+        {/* Two Column Layout */}
+        <div className="grid lg:grid-cols-2 gap-8 mb-16">
+          {/* Left Column - Quiz Start */}
+          <div className="space-y-8">
+            {/* Start Quiz Card */}
+            <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-3xl p-8 text-white shadow-lg hover:shadow-xl transition-shadow">
+              <h3 className="text-2xl font-bold mb-3">Start Your Quiz Adventure!</h3>
+              <p className="text-purple-100 mb-8 text-lg">Test your knowledge and have fun while learning! 🧠</p>
+              
+              <Link href="/quiz">
+                <button className="w-full px-8 py-4 bg-white text-purple-600 rounded-2xl font-semibold hover:bg-purple-50 transition-all transform hover:scale-105 shadow-lg">
+                  Start Quiz �
+                </button>
+              </Link>
+            </div>
+
+            {/* Category Selection Card */}
+            
+
+            {/* Session Code Card */}
+            <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
+              <h3 className="text-2xl font-bold text-gray-800 mb-6">🎯 Join Quiz Session</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">Enter Session Code</label>
+                  <div className="space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Enter session code from admin (e.g., QUIZ2025)"
+                      value={sessionCode}
+                      onChange={(e) => setSessionCode(e.target.value.toUpperCase())}
+                      className="w-full p-4 border-2 border-gray-200 rounded-2xl focus:border-purple-500 focus:outline-none text-gray-700 placeholder-gray-400 font-mono tracking-wider"
+                      maxLength={10}
+                    />
+                    <p className="text-xs text-gray-500">Ask your admin for the session code to join a specific quiz</p>
+                  </div>
+                </div>
+
+                {/* Session Action Button */}
+                {sessionCode && selectedCategory ? (
+                  <button 
+                    onClick={() => {
+                      window.location.href = `/quiz?session=${sessionCode}&category=${encodeURIComponent(selectedCategory)}`;
+                    }}
+                    className="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white py-4 rounded-2xl font-semibold hover:from-green-600 hover:to-emerald-600 transition-all transform hover:scale-[1.02]"
+                  >
+                    Join Session: {sessionCode} ({selectedCategory}) 🎯
+                  </button>
+                ) : sessionCode && !selectedCategory ? (
+                  <button className="w-full bg-gradient-to-r from-gray-400 to-gray-500 text-white py-4 rounded-2xl font-semibold cursor-not-allowed">
+                    Select category first to join session: {sessionCode}
+                  </button>
+                ) : (
+                  <button className="w-full bg-gradient-to-r from-gray-200 to-gray-300 text-gray-600 py-4 rounded-2xl font-semibold cursor-not-allowed">
+                    Enter session code to join
+                  </button>
+                )}
+
+                <div className="text-center pt-2">
+                  <p className="text-xs text-gray-500">
+                    {sessionCode && selectedCategory ? '✅ Ready to join session' : 
+                     sessionCode && !selectedCategory ? '⚠️ Category required for session' : 
+                     '💡 Session codes are provided by your quiz admin'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column - Features & Leaderboard */}
+          <div className="space-y-8">
+            {/* Leaderboard */}
+            <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-2xl font-bold text-gray-800">LeaderBoard</h3>
+                <Link href="/admin/leaderboard">
+                  <button className="text-purple-600 hover:text-purple-700 font-medium text-sm">
+                    View All →
+                  </button>
+                </Link>
+              </div>
+              <div className="text-center text-gray-500 py-8">
+                <div className="text-6xl mb-4">🏆</div>
+                <p className="text-lg mb-2">No data available yet</p>
+                <p className="text-sm mb-4">Start playing to see rankings!</p>
+                <Link href="/admin/leaderboard">
+                  <button className="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors">
+                    View Leaderboard
+                  </button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Quiz Features */}
+            <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
+              <h3 className="text-xl font-bold text-gray-800 mb-6">📚 Quiz Features</h3>
+              <div className="space-y-5">
+                <div className="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                  <span className="text-blue-500 text-xl">🕐</span>
+                  <span className="text-gray-700 font-medium">Time Challenges</span>
+                </div>
+                <div className="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                  <span className="text-green-500 text-xl">🎲</span>
+                  <span className="text-gray-700 font-medium">Randomized questions</span>
+                </div>
+                <div className="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                  <span className="text-purple-500 text-xl">📈</span>
+                  <span className="text-gray-700 font-medium">Track your progress</span>
+                </div>
+                <div className="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                  <span className="text-orange-500 text-xl">🏆</span>
+                  <span className="text-gray-700 font-medium">Earn achievements</span>
+                </div>
+                <div className="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                  <span className="text-red-500 text-xl">👥</span>
+                  <span className="text-gray-700 font-medium">Join live sessions</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Active Sessions */}
+            
+          </div>
+        </div>
+
+        {/* Explore Categories */}
+        <section className="text-center">
+          <h3 className="text-4xl font-bold text-gray-800 mb-4">Choose Your Category 📚</h3>
+          <p className="text-lg text-gray-600 mb-12">Click on a category to select it and start your quiz!</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            {categories.map((category, index) => (
+              <div
+                key={index}
+                onClick={() => setSelectedCategory(category.name)}
+                className={`border-2 rounded-3xl p-6 hover:scale-105 transition-all cursor-pointer shadow-lg hover:shadow-xl ${
+                  selectedCategory === category.name 
+                    ? 'border-purple-500 bg-purple-50 ring-4 ring-purple-200' 
+                    : category.color
+                }`}
+              >
+                <div className={`w-16 h-16 ${category.iconBg} rounded-2xl flex items-center justify-center mx-auto mb-4 ${
+                  selectedCategory === category.name ? 'ring-2 ring-purple-400' : ''
+                }`}>
+                  <span className="text-2xl text-white">{category.icon}</span>
+                </div>
+                <h4 className={`font-bold mb-3 text-lg ${
+                  selectedCategory === category.name ? 'text-purple-800' : 'text-gray-800'
+                }`}>
+                  {category.name}
+                  {selectedCategory === category.name && <span className="ml-2">✓</span>}
+                </h4>
+                <p className={`text-sm leading-relaxed ${
+                  selectedCategory === category.name ? 'text-purple-600' : 'text-gray-600'
+                }`}>
+                  {category.topics}
+                </p>
+              </div>
+            ))}
+          </div>
+          
+          {selectedCategory && (
+            <div className="mt-8 p-6 bg-purple-50 rounded-3xl border-2 border-purple-200 max-w-2xl mx-auto">
+              <h4 className="text-xl font-bold text-purple-800 mb-2">
+                🎯 Selected: {selectedCategory}
+              </h4>
+              <p className="text-purple-600 mb-4">
+                You're ready to start! Use the quiz controls above to begin.
+              </p>
+              <button 
+                onClick={() => {
+                  window.location.href = `/quiz?category=${encodeURIComponent(selectedCategory)}`;
+                }}
+                className="bg-purple-600 text-white px-8 py-3 rounded-2xl font-semibold hover:bg-purple-700 transition-all transform hover:scale-105 shadow-lg"
+              >
+                Start {selectedCategory} Quiz Now! 🚀
+              </button>
+            </div>
+          )}
+        </section>
+      </main>
+    </div>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <ProtectedRoute>
+      <HomePageContent />
+    </ProtectedRoute>
+  );
+}

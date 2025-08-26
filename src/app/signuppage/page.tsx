@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useAuth } from '../../../contexts/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export default function SignUpPage() {
   const [accountType, setAccountType] = useState<'admin' | 'user'>('user');
@@ -9,15 +11,55 @@ export default function SignUpPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSignUp = (e: React.FormEvent) => {
+  const { signUp } = useAuth();
+  const router = useRouter();
+
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+
     if (password !== confirmPassword) {
-      alert('Passwords do not match!');
+      setError('Passwords do not match!');
       return;
     }
-    // Handle sign up logic here
-    console.log('Sign up attempt:', { accountType, username, email, password });
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long!');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { data, error } = await signUp(email, password, {
+        username,
+        accountType
+      });
+      
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      if (data.user) {
+        // Show success message with different text for admin
+        const message = accountType === 'admin' 
+          ? 'Admin account created successfully! Please check your email to confirm your account. You will have admin privileges once confirmed. 👑' 
+          : 'Account created successfully! Please check your email to confirm your account. 🎉';
+        
+        alert(message);
+        
+        // Redirect to login page for email confirmation
+        router.push('/loginpage');
+      }
+    } catch (err) {
+      setError('An unexpected error occurred');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -87,6 +129,12 @@ export default function SignUpPage() {
 
           {/* Sign Up Form */}
           <form onSubmit={handleSignUp} className="space-y-4">
+            {error && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
+                {error}
+              </div>
+            )}
+            
             <div>
               <input
                 type="text"
@@ -95,6 +143,7 @@ export default function SignUpPage() {
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full py-3 px-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                 required
+                disabled={loading}
               />
             </div>
             <div>
@@ -105,6 +154,7 @@ export default function SignUpPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full py-3 px-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                 required
+                disabled={loading}
               />
             </div>
             <div>
@@ -115,6 +165,7 @@ export default function SignUpPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full py-3 px-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                 required
+                disabled={loading}
               />
             </div>
             <div>
@@ -125,14 +176,16 @@ export default function SignUpPage() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full py-3 px-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                 required
+                disabled={loading}
               />
             </div>
             
             <button
               type="submit"
-              className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+              disabled={loading}
+              className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Sign Up ✨
+              {loading ? 'Creating Account...' : 'Sign Up ✨'}
             </button>
           </form>
 

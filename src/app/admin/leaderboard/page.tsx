@@ -1,0 +1,308 @@
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+import { useAuth } from '../../../../contexts/AuthContext';
+import ProtectedRoute from '../../../../components/ProtectedRoute';
+
+interface Player {
+  id: string;
+  name: string;
+  score: string;
+  percentage: string;
+  accuracy: string;
+  time: string;
+  category: string;
+  date: string;
+  rank: number;
+  avatar?: string;
+}
+
+function LeaderboardPageContent() {
+  const { user, signOut } = useAuth();
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+
+  const handleLogout = async () => {
+    await signOut();
+  };
+
+  // Mock data for leaderboard
+  const players: Player[] = [
+    {
+      id: '1',
+      name: 'Phanith',
+      score: '10/10',
+      percentage: '100%',
+      accuracy: 'Accuracy',
+      time: '2:30',
+      category: 'History',
+      date: '1/23/2023',
+      rank: 1
+    },
+    {
+      id: '2',
+      name: 'Sophorn',
+      score: '9/10',
+      percentage: '90%',
+      accuracy: 'Accuracy',
+      time: '2:45',
+      category: 'Science',
+      date: '1/22/2023',
+      rank: 2
+    },
+    {
+      id: '3',
+      name: 'Sonya',
+      score: '8/10',
+      percentage: '80%',
+      accuracy: 'Accuracy',
+      time: '3:15',
+      category: 'Technology',
+      date: '1/21/2023',
+      rank: 3
+    },
+    {
+      id: '4',
+      name: 'Alex',
+      score: '8/10',
+      percentage: '80%',
+      accuracy: 'Accuracy',
+      time: '2:50',
+      category: 'History',
+      date: '1/20/2023',
+      rank: 4
+    },
+    {
+      id: '5',
+      name: 'Maria',
+      score: '7/10',
+      percentage: '70%',
+      accuracy: 'Accuracy',
+      time: '3:00',
+      category: 'Science',
+      date: '1/19/2023',
+      rank: 5
+    }
+  ];
+
+  const categories = ['All', 'History', 'Science', 'Technology', 'Sports', 'Literature'];
+
+  const filteredPlayers = selectedCategory === 'All' 
+    ? players 
+    : players.filter(player => player.category === selectedCategory);
+
+  const topThree = filteredPlayers.slice(0, 3);
+  const remainingPlayers = filteredPlayers.slice(3);
+
+  const getRankIcon = (rank: number) => {
+    switch (rank) {
+      case 1: return '🥇';
+      case 2: return '🥈';
+      case 3: return '🥉';
+      default: return '🏅';
+    }
+  };
+
+  const getRankColor = (rank: number) => {
+    switch (rank) {
+      case 1: return 'bg-yellow-400 border-yellow-500';
+      case 2: return 'bg-gray-300 border-gray-400';
+      case 3: return 'bg-orange-400 border-orange-500';
+      default: return 'bg-gray-200 border-gray-300';
+    }
+  };
+
+  const getRankLabel = (rank: number) => {
+    switch (rank) {
+      case 1: return 'Champion';
+      case 2: return 'Runner-up';
+      case 3: return 'Third place';
+      default: return `#${rank}`;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b border-gray-100">
+        <div className="max-w-7xl mx-auto flex justify-between items-center p-4 px-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
+              <span className="text-white font-bold text-lg">👑</span>
+            </div>
+            <h1 className="text-2xl font-bold text-purple-700">Hat rean</h1>
+          </div>
+          
+          <nav className="flex items-center gap-8">
+            <Link href="/homepage" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium">
+              🏠 Home
+            </Link>
+            <Link href="/admin/leaderboard" className="flex items-center gap-2 text-purple-600 font-medium">
+              📊 Leaderboard
+            </Link>
+            <Link href="/admin" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium">
+              ⚙️ Admin
+            </Link>
+            <Link href="/admin/manage" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium">
+              📝 Manage
+            </Link>
+          </nav>
+
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-gray-600">
+              Hi, {user?.user_metadata?.username || user?.email || 'Admin'}! 👋
+            </span>
+            <button 
+              onClick={handleLogout}
+              className="px-4 py-2 text-sm text-gray-600 hover:text-purple-600 transition-colors"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-7xl mx-auto px-6 py-8">
+        {/* Hall of Fame Title */}
+        <div className="text-center mb-12">
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <div className="text-6xl">🏆</div>
+            <h2 className="text-5xl font-bold text-transparent bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text">
+              Hall of Fame
+            </h2>
+            <div className="text-6xl">🏆</div>
+          </div>
+          <p className="text-xl text-gray-600">See who's crushing it in the quiz world! ⚡</p>
+        </div>
+
+        {/* Category Filter */}
+        <div className="text-center mb-8">
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="px-6 py-3 border-2 border-purple-300 rounded-2xl focus:border-purple-500 focus:outline-none bg-white text-purple-700 font-semibold"
+          >
+            {categories.map(category => (
+              <option key={category} value={category}>{category}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Top 3 Podium */}
+        <div className="flex justify-center items-end gap-8 mb-16">
+          {/* Second Place */}
+          {topThree[1] && (
+            <div className="bg-white rounded-3xl p-6 shadow-lg border-2 border-gray-200 text-center w-64">
+              <div className={`w-20 h-20 ${getRankColor(2)} rounded-full flex items-center justify-center mx-auto mb-4 border-4`}>
+                <span className="text-3xl">{getRankIcon(2)}</span>
+              </div>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">{topThree[1].name}</h3>
+              <div className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm font-semibold mb-3">
+                {getRankLabel(2)}
+              </div>
+              <div className="text-lg font-bold text-gray-800 mb-1">{topThree[1].score}</div>
+              <div className="text-sm text-gray-600">{topThree[1].percentage}</div>
+            </div>
+          )}
+
+          {/* First Place - Highlighted */}
+          {topThree[0] && (
+            <div className="relative">
+              <div className="absolute -inset-3 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-3xl opacity-30 blur-xl"></div>
+              <div className="relative bg-white rounded-3xl p-8 shadow-xl border-4 border-yellow-400 text-center w-80 transform scale-110">
+                <div className={`w-24 h-24 ${getRankColor(1)} rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-yellow-500`}>
+                  <span className="text-4xl">{getRankIcon(1)}</span>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">{topThree[0].name}</h3>
+                <div className="bg-yellow-400 text-yellow-900 px-6 py-2 rounded-full text-sm font-bold mb-4">
+                  {getRankLabel(1)}
+                </div>
+                <div className="text-xl font-bold text-gray-800 mb-1">{topThree[0].score}</div>
+                <div className="text-base text-gray-600">{topThree[0].percentage}</div>
+              </div>
+            </div>
+          )}
+
+          {/* Third Place */}
+          {topThree[2] && (
+            <div className="bg-white rounded-3xl p-6 shadow-lg border-2 border-orange-200 text-center w-64">
+              <div className={`w-20 h-20 ${getRankColor(3)} rounded-full flex items-center justify-center mx-auto mb-4 border-4`}>
+                <span className="text-3xl">{getRankIcon(3)}</span>
+              </div>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">{topThree[2].name}</h3>
+              <div className="bg-orange-400 text-orange-900 px-4 py-2 rounded-full text-sm font-semibold mb-3">
+                {getRankLabel(3)}
+              </div>
+              <div className="text-lg font-bold text-gray-800 mb-1">{topThree[2].score}</div>
+              <div className="text-sm text-gray-600">{topThree[2].percentage}</div>
+            </div>
+          )}
+        </div>
+
+        {/* Complete Rankings */}
+        <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-3xl p-8 shadow-xl">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="bg-white/20 p-3 rounded-2xl">
+              <span className="text-3xl">⭐</span>
+            </div>
+            <h3 className="text-3xl font-bold text-white">Complete Rankings ⭐</h3>
+          </div>
+
+          <div className="space-y-4">
+            {/* Include all players */}
+            {filteredPlayers.map((player, index) => (
+              <div key={player.id} className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-12 h-12 ${getRankColor(player.rank)} rounded-full flex items-center justify-center border-2`}>
+                        <span className="text-xl font-bold">{getRankIcon(player.rank)}</span>
+                      </div>
+                      <div>
+                        <h4 className="text-xl font-bold text-gray-800">{player.name}</h4>
+                        <p className="text-sm text-gray-600">{player.date}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-4">
+                      <span className="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-semibold">
+                        Champions
+                      </span>
+                      <span className="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm">
+                        {player.category}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="text-right">
+                    <div className="flex items-center gap-6">
+                      <div className="text-right">
+                        <div className="text-2xl font-bold text-gray-800">{player.score}</div>
+                        <div className="text-3xl font-bold text-green-600">{player.percentage}</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-sm text-gray-600">{player.time}</div>
+                        <div className="text-sm text-gray-500 flex items-center gap-1">
+                          🎯 {player.accuracy}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Empty State */}
+        {filteredPlayers.length === 0 && (
+          <div className="text-center py-16">
+            <div className="text-8xl mb-4 opacity-30">🏆</div>
+            <h3 className="text-2xl font-bold text-gray-400 mb-2">No rankings yet</h3>
+            <p className="text-gray-500">Start playing quizzes to see the leaderboard!</p>
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}
