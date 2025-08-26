@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '../../../../contexts/AuthContext';
 import ProtectedRoute from '../../../../components/ProtectedRoute';
-import { getLeaderboard } from '../../../lib/database';
+import { getLeaderboard, getCurrentUserProfile } from '../../../lib/database';
 
 interface LeaderboardPlayer {
   id: string;
@@ -24,6 +24,8 @@ function LeaderboardPageContent() {
   const [players, setPlayers] = useState<LeaderboardPlayer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loadingProfile, setLoadingProfile] = useState(true);
 
   const handleLogout = async () => {
     await signOut();
@@ -31,6 +33,7 @@ function LeaderboardPageContent() {
 
   useEffect(() => {
     loadLeaderboardData();
+    loadUserProfile();
   }, []);
 
   const loadLeaderboardData = async () => {
@@ -57,6 +60,20 @@ function LeaderboardPageContent() {
       setError('Failed to load leaderboard data');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadUserProfile = async () => {
+    try {
+      setLoadingProfile(true);
+      const profile = await getCurrentUserProfile();
+      if (profile) {
+        setIsAdmin(profile.role === 'admin');
+      }
+    } catch (error) {
+      console.error('Error loading user profile:', error);
+    } finally {
+      setLoadingProfile(false);
     }
   };
 
@@ -117,12 +134,16 @@ function LeaderboardPageContent() {
             <Link href="/admin/leaderboard" className="flex items-center gap-2 text-purple-600 font-medium">
               📊 Leaderboard
             </Link>
-            <Link href="/admin" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium">
-              ⚙️ Admin
-            </Link>
-            <Link href="/admin/manage" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium">
-              📝 Manage
-            </Link>
+            {!loadingProfile && isAdmin && (
+              <>
+                <Link href="/admin" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium">
+                  ⚙️ Admin
+                </Link>
+                <Link href="/admin/manage" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium">
+                  📝 Manage
+                </Link>
+              </>
+            )}
           </nav>
 
           <div className="flex items-center gap-4">

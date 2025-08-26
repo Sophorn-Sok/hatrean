@@ -100,6 +100,17 @@ export const getUserProfile = async (userId: string): Promise<UserProfile | null
   return data;
 };
 
+export const getCurrentUserProfile = async (): Promise<UserProfile | null> => {
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  
+  if (authError || !user) {
+    console.error('Error getting current user:', authError);
+    return null;
+  }
+
+  return getUserProfile(user.id);
+};
+
 // Debug function to check current user's authentication and role
 export const debugCurrentUser = async () => {
   try {

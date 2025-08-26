@@ -365,20 +365,49 @@ function QuizContent() {
 
           {/* Options */}
           <div className="space-y-4 mb-8">
-            {Object.entries(currentQ.options as Record<string, string>).map(([key, value]) => (
-              <button
-                key={key}
-                onClick={() => handleAnswerSelect(key)}
-                className={`w-full p-4 text-left rounded-xl border-2 transition-all ${
-                  selectedAnswer === key
-                    ? 'border-purple-500 bg-purple-50 text-purple-800'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                }`}
-              >
-                <span className="font-semibold mr-3">{key}.</span>
-                {value}
-              </button>
-            ))}
+            {currentQ.question_type === 'true_false' ? (
+              // True/False options
+              <>
+                <button
+                  onClick={() => handleAnswerSelect('true')}
+                  className={`w-full p-4 text-left rounded-xl border-2 transition-all ${
+                    selectedAnswer === 'true'
+                      ? 'border-purple-500 bg-purple-50 text-purple-800'
+                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  <span className="font-semibold mr-3">✓</span>
+                  True
+                </button>
+                <button
+                  onClick={() => handleAnswerSelect('false')}
+                  className={`w-full p-4 text-left rounded-xl border-2 transition-all ${
+                    selectedAnswer === 'false'
+                      ? 'border-purple-500 bg-purple-50 text-purple-800'
+                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  <span className="font-semibold mr-3">✗</span>
+                  False
+                </button>
+              </>
+            ) : (
+              // Multiple choice options
+              Object.entries(currentQ.options as Record<string, string>).map(([key, value]) => (
+                <button
+                  key={key}
+                  onClick={() => handleAnswerSelect(key)}
+                  className={`w-full p-4 text-left rounded-xl border-2 transition-all ${
+                    selectedAnswer === key
+                      ? 'border-purple-500 bg-purple-50 text-purple-800'
+                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  <span className="font-semibold mr-3">{key}.</span>
+                  {value}
+                </button>
+              ))
+            )}
           </div>
 
           {/* Actions */}

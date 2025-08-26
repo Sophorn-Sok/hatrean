@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '../../../contexts/AuthContext';
 import ProtectedRoute from '../../../components/ProtectedRoute';
-import { getLeaderboard } from '../../lib/database';
+import { getLeaderboard, getCurrentUserProfile } from '../../lib/database';
 
 interface TopPlayer {
   id: string;
@@ -20,10 +20,13 @@ function HomePageContent() {
   const [sessionCode, setSessionCode] = useState<string>('');
   const [topPlayers, setTopPlayers] = useState<TopPlayer[]>([]);
   const [loadingLeaderboard, setLoadingLeaderboard] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loadingProfile, setLoadingProfile] = useState(true);
   const { user, signOut } = useAuth();
 
   useEffect(() => {
     loadTopPlayers();
+    loadUserProfile();
   }, []);
 
   const loadTopPlayers = async () => {
@@ -35,6 +38,20 @@ function HomePageContent() {
       console.error('Error loading top players:', error);
     } finally {
       setLoadingLeaderboard(false);
+    }
+  };
+
+  const loadUserProfile = async () => {
+    try {
+      setLoadingProfile(true);
+      const profile = await getCurrentUserProfile();
+      if (profile) {
+        setIsAdmin(profile.role === 'admin');
+      }
+    } catch (error) {
+      console.error('Error loading user profile:', error);
+    } finally {
+      setLoadingProfile(false);
     }
   };
 
@@ -108,7 +125,11 @@ function HomePageContent() {
             <Link href="/admin/leaderboard" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium">
               📊 Leaderboard
             </Link>
-            
+            {!loadingProfile && isAdmin && (
+              <Link href="/admin" className="flex items-center gap-2 text-orange-600 hover:text-orange-700 font-medium">
+                ⚙️ Admin
+              </Link>
+            )}
           </nav>
 
           <div className="flex items-center gap-4">
