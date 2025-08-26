@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Home() {
   const features = [
@@ -58,8 +59,14 @@ export default function Home() {
       <header className="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto flex justify-between items-center p-4 px-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-lg">👑</span>
+            <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center overflow-hidden">
+              <Image 
+                src="/logo (2).png" 
+                alt="Hat rean Logo" 
+                width={32} 
+                height={32} 
+                className="object-contain"
+              />
             </div>
             <h1 className="text-2xl font-bold text-purple-700">Hat rean</h1>
           </div>
@@ -293,8 +300,14 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">👑</span>
+                <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center overflow-hidden">
+                  <Image 
+                    src="/logo (2).png" 
+                    alt="Hat rean Logo" 
+                    width={32} 
+                    height={32} 
+                    className="object-contain"
+                  />
                 </div>
                 <h4 className="text-2xl font-bold">Hat rean</h4>
               </div>
