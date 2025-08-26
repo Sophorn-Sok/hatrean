@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../../../../contexts/AuthContext';
 import ProtectedRoute from '../../../../components/ProtectedRoute';
-import { getLeaderboard, getUserQuizHistory } from '../../../lib/database';
+import { getLeaderboard } from '../../../lib/database';
 
 interface LeaderboardPlayer {
   id: string;
@@ -41,13 +41,13 @@ function LeaderboardPageContent() {
       const leaderboardData = await getLeaderboard(undefined, 50); // Get top 50 players
       
       // Transform the data to match our interface
-      const transformedPlayers: LeaderboardPlayer[] = leaderboardData.map((player: any, index: number) => ({
-        id: player.id,
-        username: player.username || 'Unknown User',
-        full_name: player.full_name || 'Unknown User',
-        total_score: player.total_score || 0,
-        total_quizzes: player.total_quizzes || 0,
-        average_score: player.total_quizzes > 0 ? Math.round(player.total_score / player.total_quizzes) : 0,
+      const transformedPlayers: LeaderboardPlayer[] = leaderboardData.map((player: Record<string, unknown>, index: number) => ({
+        id: (player.id as string) || '',
+        username: (player.username as string) || 'Unknown User',
+        full_name: (player.full_name as string) || 'Unknown User',
+        total_score: (player.total_score as number) || 0,
+        total_quizzes: (player.total_quizzes as number) || 0,
+        average_score: (player.total_quizzes as number) > 0 ? Math.round((player.total_score as number) / (player.total_quizzes as number)) : 0,
         rank: index + 1
       }));
 
@@ -66,7 +66,6 @@ function LeaderboardPageContent() {
   const filteredPlayers = players;
 
   const topThree = filteredPlayers.slice(0, 3);
-  const remainingPlayers = filteredPlayers.slice(3);
 
   const getRankIcon = (rank: number) => {
     switch (rank) {
@@ -173,7 +172,7 @@ function LeaderboardPageContent() {
                 </h2>
                 <div className="text-6xl">🏆</div>
               </div>
-              <p className="text-xl text-gray-600">See who's crushing it in the quiz world! ⚡</p>
+              <p className="text-xl text-gray-600">See who&apos;s crushing it in the quiz world! ⚡</p>
             </div>
 
             {/* Category Filter */}
@@ -254,7 +253,7 @@ function LeaderboardPageContent() {
 
                 <div className="space-y-4">
                   {/* Include all players */}
-                  {filteredPlayers.map((player, index) => (
+                  {filteredPlayers.map((player) => (
                     <div key={player.id} className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-6">

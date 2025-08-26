@@ -196,12 +196,12 @@ export default function Home() {
             <div>
               <h3 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">About Hat rean</h3>
               <p className="text-lg text-gray-600 mb-6">
-                Hat rean is more than just a quiz platform - it's a community of curious minds passionate about learning. 
-                Founded with the mission to make education fun and accessible, we've created an engaging environment where 
+                Hat rean is more than just a quiz platform - it&apos;s a community of curious minds passionate about learning. 
+                Founded with the mission to make education fun and accessible, we&apos;ve created an engaging environment where 
                 knowledge meets entertainment.
               </p>
               <p className="text-lg text-gray-600 mb-8">
-                Whether you're a student looking to test your knowledge, a teacher seeking interactive content, or 
+                Whether you&apos;re a student looking to test your knowledge, a teacher seeking interactive content, or 
                 someone who simply loves trivia, Hat rean has something for everyone.
               </p>
               <div className="flex gap-4">

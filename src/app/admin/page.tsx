@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../../../contexts/AuthContext';
 import ProtectedRoute from '../../../components/ProtectedRoute';
@@ -16,14 +16,15 @@ function AdminPageContent() {
   const { user, signOut } = useAuth();
   const [categories, setCategories] = useState<Category[]>([]);
   const [activeSessions, setActiveSessions] = useState<QuizSession[]>([]);
-  const [userProfile, setUserProfile] = useState<any>(null);
+  const [userProfile, setUserProfile] = useState<{
+    id: string;
+    username?: string;
+    full_name?: string;
+    role?: string;
+  } | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadDashboardData();
-  }, [user]);
-
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     if (!user) return;
     
     setLoading(true);
@@ -41,7 +42,11 @@ function AdminPageContent() {
       console.error('Error loading dashboard data:', error);
     }
     setLoading(false);
-  };
+  }, [user]);
+
+  useEffect(() => {
+    loadDashboardData();
+  }, [user, loadDashboardData]);
 
   const handleLogout = async () => {
     await signOut();

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../../../contexts/AuthContext';
 import ProtectedRoute from '../../../../components/ProtectedRoute';
 import { supabase } from '../../../../lib/supabase';
@@ -34,6 +34,19 @@ function AdminQuestionsContent() {
     points: 10
   });
 
+  const loadCategories = async () => {
+    const data = await getCategories();
+    setCategories(data);
+  };
+
+  const loadQuestions = useCallback(async () => {
+    if (!selectedCategory) return;
+    setLoading(true);
+    const data = await getQuestionsByCategory(selectedCategory);
+    setQuestions(data);
+    setLoading(false);
+  }, [selectedCategory]);
+
   useEffect(() => {
     loadCategories();
   }, []);
@@ -42,20 +55,7 @@ function AdminQuestionsContent() {
     if (selectedCategory) {
       loadQuestions();
     }
-  }, [selectedCategory]);
-
-  const loadCategories = async () => {
-    const data = await getCategories();
-    setCategories(data);
-  };
-
-  const loadQuestions = async () => {
-    if (!selectedCategory) return;
-    setLoading(true);
-    const data = await getQuestionsByCategory(selectedCategory);
-    setQuestions(data);
-    setLoading(false);
-  };
+  }, [selectedCategory, loadQuestions]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -277,7 +277,7 @@ function AdminQuestionsContent() {
                       </label>
                       <select
                         value={formData.question_type}
-                        onChange={(e) => setFormData({...formData, question_type: e.target.value as any})}
+                        onChange={(e) => setFormData({...formData, question_type: e.target.value as 'multiple_choice' | 'true_false' | 'text'})}
                         className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none"
                       >
                         <option value="multiple_choice">Multiple Choice</option>
@@ -291,7 +291,7 @@ function AdminQuestionsContent() {
                       </label>
                       <select
                         value={formData.difficulty}
-                        onChange={(e) => setFormData({...formData, difficulty: e.target.value as any})}
+                        onChange={(e) => setFormData({...formData, difficulty: e.target.value as 'easy' | 'medium' | 'hard'})}
                         className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none"
                       >
                         <option value="easy">Easy</option>

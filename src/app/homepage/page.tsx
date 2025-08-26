@@ -397,7 +397,7 @@ function HomePageContent() {
                 🎯 Selected: {selectedCategory}
               </h4>
               <p className="text-purple-600 mb-4">
-                You're ready to start! Use the quiz controls above to begin.
+                You&apos;re ready to start! Use the quiz controls above to begin.
               </p>
               <button 
                 onClick={() => {

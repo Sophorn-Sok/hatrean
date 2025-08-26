@@ -53,7 +53,7 @@ export interface QuizSession {
   time_limit?: number;
   max_participants?: number;
   questions?: string[]; // Array of question IDs
-  settings?: Record<string, any>;
+  settings?: Record<string, unknown>;
   created_at: string;
   updated_at: string;
 }
@@ -63,7 +63,7 @@ export interface QuizAttempt {
   user_id: string;
   session_id?: string;
   category_id?: string;
-  questions_data: any;
+  questions_data: Record<string, string>;
   score: number;
   total_questions: number;
   correct_answers: number;
@@ -441,7 +441,7 @@ export const getUserStatistics = async (userId: string): Promise<UserStatistics[
 };
 
 export const getLeaderboard = async (categoryId?: string, limit: number = 10) => {
-  let query = supabase
+  const query = supabase
     .from('user_profiles')
     .select('id, username, full_name, total_score, total_quizzes')
     .order('total_score', { ascending: false })

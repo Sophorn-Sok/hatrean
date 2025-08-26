@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../../../contexts/AuthContext';
 import ProtectedRoute from '../../../components/ProtectedRoute';
@@ -40,20 +40,7 @@ function QuizContent() {
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [startTime, setStartTime] = useState<Date | null>(null);
 
-  useEffect(() => {
-    initializeQuiz();
-  }, [sessionCode, categoryName]);
-
-  useEffect(() => {
-    if (isQuizStarted && timeLeft > 0 && !isQuizCompleted) {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-      return () => clearTimeout(timer);
-    } else if (timeLeft === 0 && isQuizStarted) {
-      handleNextQuestion(); // Auto-submit when time runs out
-    }
-  }, [timeLeft, isQuizStarted, isQuizCompleted]);
-
-  const initializeQuiz = async () => {
+  const initializeQuiz = useCallback(async () => {
     if (!user) return;
     
     setLoading(true);
@@ -122,7 +109,7 @@ function QuizContent() {
     }
 
     setLoading(false);
-  };
+  }, [sessionCode, categoryName, user]);
 
   const startQuiz = () => {
     setIsQuizStarted(true);
@@ -133,31 +120,7 @@ function QuizContent() {
     setSelectedAnswer(answer);
   };
 
-  const handleNextQuestion = () => {
-    // Save the answer
-    if (selectedAnswer) {
-      const newAnswers = { ...userAnswers };
-      newAnswers[questions[currentQuestion].id] = selectedAnswer;
-      setUserAnswers(newAnswers);
-      
-      // Check if answer is correct
-      if (selectedAnswer === questions[currentQuestion].correct_answer) {
-        setCorrectAnswers(prev => prev + 1);
-        setScore(prev => prev + (questions[currentQuestion].points || 10));
-      }
-    }
-
-    // Move to next question or finish quiz
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-      setSelectedAnswer('');
-      setTimeLeft(session?.time_limit || 30); // Reset timer for next question
-    } else {
-      finishQuiz();
-    }
-  };
-
-  const finishQuiz = async () => {
+  const finishQuiz = useCallback(async () => {
     setIsQuizCompleted(true);
     
     if (!user) return;
@@ -181,7 +144,44 @@ function QuizContent() {
     } catch (error) {
       console.error('Error submitting quiz:', error);
     }
-  };
+  }, [user, startTime, session, userAnswers, score, questions.length, correctAnswers]);
+
+  const handleNextQuestion = useCallback(() => {
+    // Save the answer
+    if (selectedAnswer) {
+      const newAnswers = { ...userAnswers };
+      newAnswers[questions[currentQuestion].id] = selectedAnswer;
+      setUserAnswers(newAnswers);
+      
+      // Check if answer is correct
+      if (selectedAnswer === questions[currentQuestion].correct_answer) {
+        setCorrectAnswers(prev => prev + 1);
+        setScore(prev => prev + (questions[currentQuestion].points || 10));
+      }
+    }
+
+    // Move to next question or finish quiz
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+      setSelectedAnswer('');
+      setTimeLeft(session?.time_limit || 30); // Reset timer for next question
+    } else {
+      finishQuiz();
+    }
+  }, [selectedAnswer, userAnswers, questions, currentQuestion, session?.time_limit, finishQuiz]);
+
+  useEffect(() => {
+    initializeQuiz();
+  }, [initializeQuiz]);
+
+  useEffect(() => {
+    if (isQuizStarted && timeLeft > 0 && !isQuizCompleted) {
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timer);
+    } else if (timeLeft === 0 && isQuizStarted) {
+      handleNextQuestion(); // Auto-submit when time runs out
+    }
+  }, [timeLeft, isQuizStarted, isQuizCompleted, handleNextQuestion]);
 
   if (loading) {
     return (

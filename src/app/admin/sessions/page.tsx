@@ -12,8 +12,7 @@ import {
   getQuestionsByCategory,
   generateSessionCode,
   Category,
-  QuizSession,
-  Question
+  QuizSession
 } from '../../../lib/database';
 
 function AdminSessionsContent() {
@@ -23,7 +22,17 @@ function AdminSessionsContent() {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedSession, setSelectedSession] = useState<QuizSession | null>(null);
-  const [participants, setParticipants] = useState<any[]>([]);
+  const [participants, setParticipants] = useState<Array<{
+    id: string;
+    joined_at?: string;
+    user_profiles?: {
+      username?: string;
+    };
+    quiz_attempts?: {
+      score?: number;
+      completed_at?: string;
+    };
+  }>>([]);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -396,14 +405,14 @@ function AdminSessionsContent() {
                 {participants.length === 0 ? (
                   <p className="text-gray-700 text-center py-4 font-medium">No participants yet</p>
                 ) : (
-                  participants.map((participant, index) => (
+                  participants.map((participant) => (
                     <div key={participant.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                       <div>
                         <p className="font-semibold text-gray-900">
                           {participant.user_profiles?.username || 'Unknown User'}
                         </p>
                         <p className="text-sm text-gray-700">
-                          Joined: {new Date(participant.joined_at).toLocaleString()}
+                          Joined: {participant.joined_at ? new Date(participant.joined_at).toLocaleString() : 'Unknown'}
                         </p>
                       </div>
                       {participant.quiz_attempts && (
@@ -412,7 +421,7 @@ function AdminSessionsContent() {
                             Score: {participant.quiz_attempts.score}
                           </p>
                           <p className="text-xs text-gray-600">
-                            Completed: {new Date(participant.quiz_attempts.completed_at).toLocaleString()}
+                            Completed: {participant.quiz_attempts.completed_at ? new Date(participant.quiz_attempts.completed_at).toLocaleString() : 'Unknown'}
                           </p>
                         </div>
                       )}
@@ -422,7 +431,7 @@ function AdminSessionsContent() {
               </div>
             ) : (
               <div className="text-center py-8">
-                <p className="text-gray-700 font-medium">Click "View Participants" on any session to see who has joined.</p>
+                <p className="text-gray-700 font-medium">Click &quot;View Participants&quot; on any session to see who has joined.</p>
               </div>
             )}
           </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../../../contexts/AuthContext';
 import ProtectedRoute from '../../../components/ProtectedRoute';
@@ -11,13 +11,10 @@ import {
   submitSessionQuizAttempt,
   saveQuizAttempt,
   updateUserQuizStats,
-  getRandomQuestions,
   getCategories,
-  Question,
   QuizSession
 } from '../../lib/database';
 import { 
-  getRandomQuestions as getRandomQuizQuestions,
   getQuestionsByCategory,
   getMixedQuestions as getMixedQuizQuestions,
   QuizQuestion 
@@ -53,30 +50,10 @@ function QuizContent() {
   
   // Category selection state
   const [showCategorySelection, setShowCategorySelection] = useState(false);
-  const [availableCategories, setAvailableCategories] = useState<any[]>([]);
+  const [availableCategories, setAvailableCategories] = useState<Array<{id: string; name: string; icon: string; color: string; icon_bg: string; description?: string}>>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
 
-  useEffect(() => {
-    initializeQuiz();
-  }, [sessionCode, categoryName, quizMode]);
-
-  useEffect(() => {
-    if (isQuizStarted && timeLeft > 0 && !isQuizCompleted && !isAnswerSubmitted) {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-      return () => clearTimeout(timer);
-    } else if (timeLeft === 0 && isQuizStarted && !isAnswerSubmitted) {
-      // Auto-submit when time runs out
-      if (selectedAnswer) {
-        handleSubmitAnswer();
-      } else {
-        // If no answer selected, mark as wrong and show correct answer
-        setIsAnswerSubmitted(true);
-        setShowAnswer(true);
-      }
-    }
-  }, [timeLeft, isQuizStarted, isQuizCompleted, isAnswerSubmitted, selectedAnswer]);
-
-  const initializeQuiz = async () => {
+  const initializeQuiz = useCallback(async () => {
     if (!user) return;
     
     setLoading(true);
@@ -192,7 +169,45 @@ function QuizContent() {
     }
 
     setLoading(false);
-  };
+  }, [user, quizMode, sessionCode, categoryName]);
+
+  const handleSubmitAnswer = useCallback(() => {
+    if (!selectedAnswer) return;
+    
+    setIsAnswerSubmitted(true);
+    setShowAnswer(true);
+    
+    // Save the answer
+    const newAnswers = { ...userAnswers };
+    newAnswers[questions[currentQuestion].id] = selectedAnswer;
+    setUserAnswers(newAnswers);
+    
+    // Check if answer is correct
+    if (selectedAnswer === questions[currentQuestion].correct_answer) {
+      setCorrectAnswers(prev => prev + 1);
+      setScore(prev => prev + (questions[currentQuestion].points || 10));
+    }
+  }, [selectedAnswer, userAnswers, questions, currentQuestion]);
+
+  useEffect(() => {
+    initializeQuiz();
+  }, [sessionCode, categoryName, quizMode, initializeQuiz]);
+
+  useEffect(() => {
+    if (isQuizStarted && timeLeft > 0 && !isQuizCompleted && !isAnswerSubmitted) {
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timer);
+    } else if (timeLeft === 0 && isQuizStarted && !isAnswerSubmitted) {
+      // Auto-submit when time runs out
+      if (selectedAnswer) {
+        handleSubmitAnswer();
+      } else {
+        // If no answer selected, mark as wrong and show correct answer
+        setIsAnswerSubmitted(true);
+        setShowAnswer(true);
+      }
+    }
+  }, [timeLeft, isQuizStarted, isQuizCompleted, isAnswerSubmitted, selectedAnswer, handleSubmitAnswer]);
 
   const startQuiz = () => {
     setIsQuizStarted(true);
@@ -208,24 +223,6 @@ function QuizContent() {
   const handleAnswerSelect = (answer: string) => {
     if (!isAnswerSubmitted) {
       setSelectedAnswer(answer);
-    }
-  };
-
-  const handleSubmitAnswer = () => {
-    if (!selectedAnswer) return;
-    
-    setIsAnswerSubmitted(true);
-    setShowAnswer(true);
-    
-    // Save the answer
-    const newAnswers = { ...userAnswers };
-    newAnswers[questions[currentQuestion].id] = selectedAnswer;
-    setUserAnswers(newAnswers);
-    
-    // Check if answer is correct
-    if (selectedAnswer === questions[currentQuestion].correct_answer) {
-      setCorrectAnswers(prev => prev + 1);
-      setScore(prev => prev + (questions[currentQuestion].points || 10));
     }
   };
 
@@ -274,19 +271,7 @@ function QuizContent() {
           user_id: user.id,
           session_id: undefined, // Not a session-based quiz
           category_id: undefined, // We can set this later if needed
-          questions_data: {
-            answers: userAnswers,
-            questions: questions.map(q => ({
-              id: q.id,
-              question_text: q.question_text,
-              correct_answer: q.correct_answer,
-              user_answer: userAnswers[q.id] || null,
-              is_correct: userAnswers[q.id] === q.correct_answer,
-              points_earned: userAnswers[q.id] === q.correct_answer ? q.points : 0
-            })),
-            quiz_type: quizMode === 'instant' ? 'mixed' : 'category',
-            category_name: categoryName || 'Mixed Categories'
-          },
+          questions_data: userAnswers, // Just store the user answers
           score,
           total_questions: questions.length,
           correct_answers: correctAnswers,

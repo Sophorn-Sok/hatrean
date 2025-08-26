@@ -46,6 +46,7 @@ export default function LoginPage() {
         }
       }
     } catch (err) {
+      console.error('Login error:', err);
       setError('An unexpected error occurred');
     } finally {
       setLoading(false);
@@ -136,7 +137,7 @@ export default function LoginPage() {
           {/* Sign Up Link */}
           <div className="text-center mt-6">
             <p className="text-gray-600">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link href="/signuppage" className="text-purple-600 hover:text-purple-700 font-medium">
                 Sign Up! 🚀
               </Link>

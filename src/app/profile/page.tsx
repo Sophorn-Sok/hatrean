@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import ProtectedRoute from '../../../components/ProtectedRoute';
 import { getUserProfile, getUserQuizHistory, QuizAttempt, UserProfile } from '../../lib/database';
@@ -13,13 +13,7 @@ function ProfileContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (user) {
-      loadUserData();
-    }
-  }, [user]);
-
-  const loadUserData = async () => {
+  const loadUserData = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -39,7 +33,13 @@ function ProfileContent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      loadUserData();
+    }
+  }, [user, loadUserData]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -167,7 +167,7 @@ function ProfileContent() {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {quizHistory.map((attempt, index) => (
+                  {quizHistory.map((attempt) => (
                     <div key={attempt.id} className="border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow">
                       <div className="flex justify-between items-start mb-4">
                         <div>

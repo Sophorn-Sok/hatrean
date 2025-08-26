@@ -56,6 +56,7 @@ export default function SignUpPage() {
         router.push('/loginpage');
       }
     } catch (err) {
+      console.error('Signup error:', err);
       setError('An unexpected error occurred');
     } finally {
       setLoading(false);
