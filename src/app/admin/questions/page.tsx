@@ -180,11 +180,11 @@ function AdminQuestionsContent() {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-8">
-              <h1 className="text-2xl font-bold text-gray-800">📝 Question Manager</h1>
+              <h1 className="text-2xl font-bold text-gray-900">📝 Question Manager</h1>
               <nav className="flex items-center gap-6">
-                <a href="/admin" className="text-gray-600 hover:text-purple-600">Dashboard</a>
-                <a href="/admin/sessions" className="text-gray-600 hover:text-purple-600">Sessions</a>
-                <a href="/admin/leaderboard" className="text-gray-600 hover:text-purple-600">Leaderboard</a>
+                <a href="/admin" className="text-gray-800 hover:text-purple-600 font-medium">Dashboard</a>
+                <a href="/admin/sessions" className="text-gray-800 hover:text-purple-600 font-medium">Sessions</a>
+                <a href="/admin/leaderboard" className="text-gray-800 hover:text-purple-600 font-medium">Leaderboard</a>
               </nav>
             </div>
             <a href="/homepage" className="text-purple-600 hover:text-purple-800">← Back to Home</a>
@@ -195,11 +195,11 @@ function AdminQuestionsContent() {
       <main className="max-w-7xl mx-auto px-6 py-8">
         {/* Category Selection */}
         <div className="bg-white rounded-2xl p-6 shadow-lg mb-8">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Select Category</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Select Category</h2>
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none"
+            className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-gray-900"
           >
             <option value="">Choose a category...</option>
             {categories.map((category) => (
@@ -214,7 +214,7 @@ function AdminQuestionsContent() {
           <>
             {/* Actions */}
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-800">
+              <h2 className="text-2xl font-bold text-gray-900">
                 Questions ({questions.length})
               </h2>
               <div className="flex gap-3">
@@ -243,7 +243,7 @@ function AdminQuestionsContent() {
             {showAddForm && (
               <div className="bg-white rounded-2xl p-6 shadow-lg mb-8">
                 <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-xl font-bold text-gray-800">
+                  <h3 className="text-xl font-bold text-gray-900">
                     {editingQuestion ? 'Edit Question' : 'Add New Question'}
                   </h3>
                   <button
@@ -257,13 +257,13 @@ function AdminQuestionsContent() {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Question Text */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">
                       Question Text *
                     </label>
                     <textarea
                       value={formData.question_text}
                       onChange={(e) => setFormData({...formData, question_text: e.target.value})}
-                      className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none"
+                      className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-gray-900"
                       rows={3}
                       required
                     />
@@ -272,13 +272,13 @@ function AdminQuestionsContent() {
                   {/* Question Type and Difficulty */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label className="block text-sm font-semibold text-gray-900 mb-2">
                         Question Type
                       </label>
                       <select
                         value={formData.question_type}
                         onChange={(e) => setFormData({...formData, question_type: e.target.value as 'multiple_choice' | 'true_false' | 'text'})}
-                        className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none"
+                        className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-gray-900"
                       >
                         <option value="multiple_choice">Multiple Choice</option>
                         <option value="true_false">True/False</option>
@@ -286,13 +286,13 @@ function AdminQuestionsContent() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label className="block text-sm font-semibold text-gray-900 mb-2">
                         Difficulty
                       </label>
                       <select
                         value={formData.difficulty}
                         onChange={(e) => setFormData({...formData, difficulty: e.target.value as 'easy' | 'medium' | 'hard'})}
-                        className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none"
+                        className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-gray-900"
                       >
                         <option value="easy">Easy</option>
                         <option value="medium">Medium</option>
@@ -301,14 +301,14 @@ function AdminQuestionsContent() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label className="block text-sm font-semibold text-gray-900 mb-2">
                         Points
                       </label>
                       <input
                         type="number"
                         value={formData.points}
                         onChange={(e) => setFormData({...formData, points: parseInt(e.target.value)})}
-                        className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none"
+                        className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-gray-900"
                         min="1"
                         max="100"
                       />
@@ -318,13 +318,13 @@ function AdminQuestionsContent() {
                   {/* Options (for multiple choice) */}
                   {formData.question_type === 'multiple_choice' && (
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label className="block text-sm font-semibold text-gray-900 mb-2">
                         Answer Options
                       </label>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {['A', 'B', 'C', 'D'].map((option) => (
                           <div key={option}>
-                            <label className="block text-xs text-gray-600 mb-1">Option {option}</label>
+                            <label className="block text-xs text-gray-800 mb-1">Option {option}</label>
                             <input
                               type="text"
                               value={formData.options[option]}
@@ -332,7 +332,7 @@ function AdminQuestionsContent() {
                                 ...formData,
                                 options: {...formData.options, [option]: e.target.value}
                               })}
-                              className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none"
+                              className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-gray-900"
                               required
                             />
                           </div>
@@ -343,14 +343,14 @@ function AdminQuestionsContent() {
 
                   {/* Correct Answer */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">
                       Correct Answer *
                     </label>
                     {formData.question_type === 'multiple_choice' ? (
                       <select
                         value={formData.correct_answer}
                         onChange={(e) => setFormData({...formData, correct_answer: e.target.value})}
-                        className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none"
+                        className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-gray-900"
                         required
                       >
                         <option value="">Select correct option...</option>
@@ -363,7 +363,7 @@ function AdminQuestionsContent() {
                       <select
                         value={formData.correct_answer}
                         onChange={(e) => setFormData({...formData, correct_answer: e.target.value})}
-                        className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none"
+                        className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-gray-900"
                         required
                       >
                         <option value="">Select...</option>
@@ -375,13 +375,13 @@ function AdminQuestionsContent() {
 
                   {/* Explanation */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">
                       Explanation (Optional)
                     </label>
                     <textarea
                       value={formData.explanation}
                       onChange={(e) => setFormData({...formData, explanation: e.target.value})}
-                      className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none"
+                      className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-gray-900"
                       rows={2}
                       placeholder="Explain why this is the correct answer..."
                     />
@@ -413,12 +413,12 @@ function AdminQuestionsContent() {
               {loading ? (
                 <div className="text-center py-8">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-                  <p className="text-gray-600 mt-4">Loading questions...</p>
+                  <p className="text-gray-800 mt-4">Loading questions...</p>
                 </div>
               ) : questions.length === 0 ? (
                 <div className="bg-white rounded-2xl p-8 shadow-lg text-center">
-                  <p className="text-gray-600 text-lg">No questions found for this category.</p>
-                  <p className="text-gray-500 mt-2">Add some questions to get started!</p>
+                  <p className="text-gray-800 text-lg">No questions found for this category.</p>
+                  <p className="text-gray-700 mt-2">Add some questions to get started!</p>
                 </div>
               ) : (
                 questions.map((question) => (
@@ -441,7 +441,7 @@ function AdminQuestionsContent() {
                           </span>
                         </div>
                         
-                        <h3 className="text-lg font-semibold text-gray-800 mb-3">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-3">
                           {question.question_text}
                         </h3>
                         
@@ -451,7 +451,7 @@ function AdminQuestionsContent() {
                               <div key={key} className={`p-2 rounded-lg text-sm ${
                                 key === question.correct_answer 
                                   ? 'bg-green-100 text-green-800 font-semibold' 
-                                  : 'bg-gray-50 text-gray-700'
+                                  : 'bg-gray-50 text-gray-800'
                               }`}>
                                 <span className="font-semibold">{key}:</span> {value}
                               </div>
@@ -461,7 +461,7 @@ function AdminQuestionsContent() {
                         
                         {question.question_type === 'true_false' && (
                           <div className="mb-3">
-                            <span className="text-sm text-gray-600">Correct Answer: </span>
+                            <span className="text-sm text-gray-800">Correct Answer: </span>
                             <span className="font-semibold text-green-600">
                               {question.correct_answer === 'true' ? 'True' : 'False'}
                             </span>

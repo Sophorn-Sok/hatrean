@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAuth } from '../../../../contexts/AuthContext';
 import ProtectedRoute from '../../../../components/ProtectedRoute';
 import { getLeaderboard } from '../../../lib/database';
@@ -20,7 +21,6 @@ interface LeaderboardPlayer {
 
 function LeaderboardPageContent() {
   const { user, signOut } = useAuth();
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [players, setPlayers] = useState<LeaderboardPlayer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -60,8 +60,6 @@ function LeaderboardPageContent() {
     }
   };
 
-  const categories = ['All', 'History', 'Science', 'Technology', 'Sports', 'General Knowledge'];
-
   // For now, we'll show all players since we don't have category-specific leaderboard yet
   const filteredPlayers = players;
 
@@ -100,8 +98,14 @@ function LeaderboardPageContent() {
       <header className="bg-white shadow-sm border-b border-gray-100">
         <div className="max-w-7xl mx-auto flex justify-between items-center p-4 px-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-lg">👑</span>
+            <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center overflow-hidden">
+              <Image 
+                src="/logo (2).png" 
+                alt="Hat rean Logo" 
+                width={32} 
+                height={32} 
+                className="object-contain"
+              />
             </div>
             <h1 className="text-2xl font-bold text-purple-700">Hat rean</h1>
           </div>
@@ -173,19 +177,6 @@ function LeaderboardPageContent() {
                 <div className="text-6xl">🏆</div>
               </div>
               <p className="text-xl text-gray-600">See who&apos;s crushing it in the quiz world! ⚡</p>
-            </div>
-
-            {/* Category Filter */}
-            <div className="text-center mb-8">
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-6 py-3 border-2 border-purple-300 rounded-2xl focus:border-purple-500 focus:outline-none bg-white text-purple-700 font-semibold"
-              >
-                {categories.map(category => (
-                  <option key={category} value={category}>{category}</option>
-                ))}
-              </select>
             </div>
 
             {/* Top 3 Podium */}

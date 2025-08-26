@@ -115,8 +115,15 @@ function AdminSessionsContent() {
 
   const loadParticipants = async (session: QuizSession) => {
     setSelectedSession(session);
-    const data = await getSessionParticipants(session.id);
-    setParticipants(data);
+    try {
+      const data = await getSessionParticipants(session.id);
+      setParticipants(data);
+    } catch (error) {
+      console.error('Error loading participants:', error);
+      setParticipants([]);
+      // Optionally show user-friendly error message
+      alert('Failed to load session participants. Please try again.');
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -185,7 +192,7 @@ function AdminSessionsContent() {
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData({...formData, title: e.target.value})}
-                    className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none placeholder-gray-700"
+                    className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none placeholder-gray-500 text-gray-900"
                     required
                     placeholder="e.g., Science Quiz - Chapter 5"
                   />
@@ -198,7 +205,7 @@ function AdminSessionsContent() {
                   <select
                     value={formData.category_id}
                     onChange={(e) => setFormData({...formData, category_id: e.target.value})}
-                    className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none"
+                    className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-gray-900"
                     required
                   >
                     <option value="">Choose a category...</option>
@@ -218,7 +225,7 @@ function AdminSessionsContent() {
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none placeholder-gray-700"
+                  className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none placeholder-gray-500 text-gray-900"
                   rows={3}
                   placeholder="Describe this quiz session..."
                 />
@@ -233,7 +240,7 @@ function AdminSessionsContent() {
                     type="number"
                     value={formData.time_limit}
                     onChange={(e) => setFormData({...formData, time_limit: parseInt(e.target.value)})}
-                    className="w-full p-3 border-2 border-blac-200 rounded-xl focus:border-purple-500 focus:outline-none"
+                    className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-gray-900"
                     min="5"
                     max="180"
                   />
@@ -247,7 +254,7 @@ function AdminSessionsContent() {
                     type="number"
                     value={formData.max_participants}
                     onChange={(e) => setFormData({...formData, max_participants: parseInt(e.target.value)})}
-                    className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none"
+                    className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-gray-900"
                     min="1"
                     max="1000"
                   />
@@ -269,7 +276,7 @@ function AdminSessionsContent() {
                       })}
                       className="mr-3"
                     />
-                    <span className="text-sm text-gray-800">Shuffle question order</span>
+                    <span className="text-sm text-gray-900">Shuffle question order</span>
                   </label>
                   <label className="flex items-center">
                     <input
@@ -281,7 +288,7 @@ function AdminSessionsContent() {
                       })}
                       className="mr-3"
                     />
-                    <span className="text-sm text-gray-800">Show correct answers after submission</span>
+                    <span className="text-sm text-gray-900">Show correct answers after submission</span>
                   </label>
                   <label className="flex items-center">
                     <input
@@ -293,7 +300,7 @@ function AdminSessionsContent() {
                       })}
                       className="mr-3"
                     />
-                    <span className="text-sm text-gray-800">Allow participants to review answers</span>
+                    <span className="text-sm text-gray-900">Allow participants to review answers</span>
                   </label>
                 </div>
               </div>
@@ -324,8 +331,8 @@ function AdminSessionsContent() {
           <div className="space-y-4">
             {sessions.length === 0 ? (
               <div className="bg-white rounded-2xl p-8 shadow-lg text-center">
-                <p className="text-gray-800 text-lg font-medium">No active sessions found.</p>
-                <p className="text-gray-600 mt-2">Create a session to get started!</p>
+                <p className="text-gray-900 text-lg font-medium">No active sessions found.</p>
+                <p className="text-gray-700 mt-2">Create a session to get started!</p>
               </div>
             ) : (
               sessions.map((session) => (
@@ -344,9 +351,9 @@ function AdminSessionsContent() {
                         {session.title}
                       </h3>
                       {session.description && (
-                        <p className="text-sm text-gray-700 mb-3">{session.description}</p>
+                        <p className="text-sm text-gray-800 mb-3">{session.description}</p>
                       )}
-                      <div className="text-sm text-gray-600 space-y-1">
+                      <div className="text-sm text-gray-800 space-y-1">
                         <p>⏱️ {session.time_limit} minutes</p>
                         <p>👥 Max {session.max_participants} participants</p>
                         <p>📅 Created {new Date(session.created_at).toLocaleDateString()}</p>
@@ -403,7 +410,7 @@ function AdminSessionsContent() {
             {selectedSession ? (
               <div className="space-y-3">
                 {participants.length === 0 ? (
-                  <p className="text-gray-700 text-center py-4 font-medium">No participants yet</p>
+                  <p className="text-gray-900 text-center py-4 font-medium">No participants yet</p>
                 ) : (
                   participants.map((participant) => (
                     <div key={participant.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
@@ -411,7 +418,7 @@ function AdminSessionsContent() {
                         <p className="font-semibold text-gray-900">
                           {participant.user_profiles?.username || 'Unknown User'}
                         </p>
-                        <p className="text-sm text-gray-700">
+                        <p className="text-sm text-gray-800">
                           Joined: {participant.joined_at ? new Date(participant.joined_at).toLocaleString() : 'Unknown'}
                         </p>
                       </div>
@@ -420,7 +427,7 @@ function AdminSessionsContent() {
                           <p className="font-semibold text-green-700">
                             Score: {participant.quiz_attempts.score}
                           </p>
-                          <p className="text-xs text-gray-600">
+                          <p className="text-xs text-gray-700">
                             Completed: {participant.quiz_attempts.completed_at ? new Date(participant.quiz_attempts.completed_at).toLocaleString() : 'Unknown'}
                           </p>
                         </div>
@@ -431,7 +438,7 @@ function AdminSessionsContent() {
               </div>
             ) : (
               <div className="text-center py-8">
-                <p className="text-gray-700 font-medium">Click &quot;View Participants&quot; on any session to see who has joined.</p>
+                <p className="text-gray-800 font-medium">Click &quot;View Participants&quot; on any session to see who has joined.</p>
               </div>
             )}
           </div>

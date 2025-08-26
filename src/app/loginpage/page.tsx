@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { getUserProfile } from '../../lib/database';
@@ -58,8 +59,14 @@ export default function LoginPage() {
       {/* Header */}
       <header className="flex justify-between items-center p-6 px-8">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">👑</span>
+          <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center overflow-hidden">
+            <Image 
+              src="/logo (2).png" 
+              alt="Hat rean Logo" 
+              width={24} 
+              height={24} 
+              className="object-contain"
+            />
           </div>
           <h1 className="text-2xl font-bold text-purple-700">Hat rean</h1>
         </div>
@@ -91,7 +98,7 @@ export default function LoginPage() {
           {/* Welcome Text */}
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-purple-700 mb-2">Welcome Back!</h2>
-            <p className="text-gray-600">Login to continue your quiz journey</p>
+            <p className="text-gray-800">Login to continue your quiz journey</p>
           </div>
 
           {/* Login Form */}
@@ -108,7 +115,7 @@ export default function LoginPage() {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full py-3 px-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                className="w-full py-3 px-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-gray-900 placeholder-gray-500"
                 required
                 disabled={loading}
               />
@@ -119,7 +126,7 @@ export default function LoginPage() {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full py-3 px-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                className="w-full py-3 px-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-gray-900 placeholder-gray-500"
                 required
                 disabled={loading}
               />
@@ -136,7 +143,7 @@ export default function LoginPage() {
 
           {/* Sign Up Link */}
           <div className="text-center mt-6">
-            <p className="text-gray-600">
+            <p className="text-gray-800">
               Don&apos;t have an account?{' '}
               <Link href="/signuppage" className="text-purple-600 hover:text-purple-700 font-medium">
                 Sign Up! 🚀

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 
@@ -68,8 +69,14 @@ export default function SignUpPage() {
       {/* Header */}
       <header className="flex justify-between items-center p-6 px-8">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">👑</span>
+          <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center overflow-hidden">
+            <Image 
+              src="/logo (2).png" 
+              alt="Hat rean Logo" 
+              width={24} 
+              height={24} 
+              className="object-contain"
+            />
           </div>
           <h1 className="text-2xl font-bold text-purple-700">Hat rean</h1>
         </div>
@@ -88,10 +95,16 @@ export default function SignUpPage() {
       {/* Main Content */}
       <div className="flex items-center justify-center px-4 py-8">
         <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-8 w-full max-w-md">
-          {/* Game Controller Icon */}
+          {/* Logo Icon */}
           <div className="flex justify-center mb-6">
-            <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-              <span className="text-white text-2xl">🎮</span>
+            <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center overflow-hidden">
+              <Image 
+                src="/logo (2).png" 
+                alt="Hat rean Logo" 
+                width={48} 
+                height={48} 
+                className="object-contain"
+              />
             </div>
           </div>
 
@@ -103,24 +116,24 @@ export default function SignUpPage() {
 
           {/* Account Type Selection */}
           <div className="mb-6">
-            <p className="text-center text-blue-600 font-medium mb-4">Please Select Your Account Type:</p>
+            <p className="text-center text-purple-700 font-semibold mb-4">Please Select Your Account Type:</p>
             <div className="flex gap-3">
               <button
                 onClick={() => setAccountType('admin')}
-                className={`flex-1 py-3 px-4 rounded-lg border-2 transition-all ${
+                className={`flex-1 py-3 px-4 rounded-lg border-2 transition-all font-medium ${
                   accountType === 'admin'
-                    ? 'border-blue-500 bg-blue-50 text-blue-700'
-                    : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                    ? 'border-purple-500 bg-purple-50 text-purple-700'
+                    : 'border-gray-300 text-gray-700 hover:border-purple-300 hover:bg-purple-50'
                 }`}
               >
                 Join as Admin
               </button>
               <button
                 onClick={() => setAccountType('user')}
-                className={`flex-1 py-3 px-4 rounded-lg border-2 transition-all ${
+                className={`flex-1 py-3 px-4 rounded-lg border-2 transition-all font-medium ${
                   accountType === 'user'
-                    ? 'border-blue-500 bg-blue-50 text-blue-700'
-                    : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                    ? 'border-purple-500 bg-purple-50 text-purple-700'
+                    : 'border-gray-300 text-gray-700 hover:border-purple-300 hover:bg-purple-50'
                 }`}
               >
                 Join as User
@@ -142,7 +155,7 @@ export default function SignUpPage() {
                 placeholder="Enter your username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full py-3 px-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                className="w-full py-3 px-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all placeholder-gray-500"
                 required
                 disabled={loading}
               />
@@ -153,7 +166,7 @@ export default function SignUpPage() {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full py-3 px-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                className="w-full py-3 px-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all placeholder-gray-500"
                 required
                 disabled={loading}
               />
@@ -164,7 +177,7 @@ export default function SignUpPage() {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full py-3 px-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                className="w-full py-3 px-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all placeholder-gray-500"
                 required
                 disabled={loading}
               />
@@ -175,7 +188,7 @@ export default function SignUpPage() {
                 placeholder="Confirm your password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full py-3 px-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                className="w-full py-3 px-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all placeholder-gray-500"
                 required
                 disabled={loading}
               />

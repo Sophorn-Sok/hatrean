@@ -16,6 +16,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Hat rean - Ultimate Quiz Experience",
   description: "Test your knowledge with thousands of questions across multiple categories",
+  icons: {
+    icon: "/logo (2).png",
+    shortcut: "/logo (2).png",
+    apple: "/logo (2).png",
+  },
 };
 
 export default function RootLayout({

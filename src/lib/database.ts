@@ -370,21 +370,42 @@ export const joinQuizSession = async (sessionId: string, userId: string) => {
 };
 
 export const getSessionParticipants = async (sessionId: string) => {
-  const { data, error } = await supabase
-    .from('session_participants')
-    .select(`
-      *,
-      user_profiles:user_id (username, full_name),
-      quiz_attempts:attempt_id (score, completed_at)
-    `)
-    .eq('session_id', sessionId);
+  try {
+    // First, let's try a simpler query to see if the basic table exists
+    const { data: basicData, error: basicError } = await supabase
+      .from('session_participants')
+      .select('*')
+      .eq('session_id', sessionId);
 
-  if (error) {
-    console.error('Error fetching session participants:', error);
+    if (basicError) {
+      console.error('Basic session participants query failed:', basicError);
+      return [];
+    }
+
+    // If basic query works, try the complex one with joins
+    const { data, error } = await supabase
+      .from('session_participants')
+      .select(`
+        id,
+        session_id,
+        user_id,
+        joined_at,
+        attempt_id,
+        user_profiles!inner(username, full_name)
+      `)
+      .eq('session_id', sessionId);
+
+    if (error) {
+      console.error('Error fetching session participants with joins:', error.message || error);
+      // Fallback to basic data if joins fail
+      return basicData || [];
+    }
+
+    return data || [];
+  } catch (error) {
+    console.error('Error in getSessionParticipants:', error);
     return [];
   }
-
-  return data || [];
 };
 
 // Quiz Attempt Functions
