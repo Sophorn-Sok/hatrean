@@ -26,7 +26,7 @@ function AdminQuestionsContent() {
 
   const [formData, setFormData] = useState({
     question_text: '',
-    question_type: 'multiple_choice' as 'multiple_choice' | 'true_false' | 'text',
+    question_type: 'multiple_choice' as 'multiple_choice',
     difficulty: 'medium' as 'easy' | 'medium' | 'hard',
     options: { A: '', B: '', C: '', D: '' } as Record<string, string>,
     correct_answer: '',
@@ -100,7 +100,7 @@ function AdminQuestionsContent() {
     setEditingQuestion(question);
     setFormData({
       question_text: question.question_text,
-      question_type: question.question_type,
+      question_type: 'multiple_choice', // Force multiple choice only
       difficulty: question.difficulty,
       options: (question.options as Record<string, string>) || { A: '', B: '', C: '', D: '' },
       correct_answer: question.correct_answer,
@@ -270,21 +270,7 @@ function AdminQuestionsContent() {
                   </div>
 
                   {/* Question Type and Difficulty */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-900 mb-2">
-                        Question Type
-                      </label>
-                      <select
-                        value={formData.question_type}
-                        onChange={(e) => setFormData({...formData, question_type: e.target.value as 'multiple_choice' | 'true_false' | 'text'})}
-                        className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-gray-900"
-                      >
-                        <option value="multiple_choice">Multiple Choice</option>
-                        <option value="true_false">True/False</option>
-                      </select>
-                    </div>
-
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-semibold text-gray-900 mb-2">
                         Difficulty
@@ -315,62 +301,47 @@ function AdminQuestionsContent() {
                     </div>
                   </div>
 
-                  {/* Options (for multiple choice) */}
-                  {formData.question_type === 'multiple_choice' && (
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-900 mb-2">
-                        Answer Options
-                      </label>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {['A', 'B', 'C', 'D'].map((option) => (
-                          <div key={option}>
-                            <label className="block text-xs text-gray-800 mb-1">Option {option}</label>
-                            <input
-                              type="text"
-                              value={formData.options[option]}
-                              onChange={(e) => setFormData({
-                                ...formData,
-                                options: {...formData.options, [option]: e.target.value}
-                              })}
-                              className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-gray-900"
-                              required
-                            />
-                          </div>
-                        ))}
-                      </div>
+                  {/* Answer Options */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      Answer Options
+                    </label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {['A', 'B', 'C', 'D'].map((option) => (
+                        <div key={option}>
+                          <label className="block text-xs text-gray-800 mb-1">Option {option}</label>
+                          <input
+                            type="text"
+                            value={formData.options[option]}
+                            onChange={(e) => setFormData({
+                              ...formData,
+                              options: {...formData.options, [option]: e.target.value}
+                            })}
+                            className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-gray-900"
+                            required
+                          />
+                        </div>
+                      ))}
                     </div>
-                  )}
+                  </div>
 
                   {/* Correct Answer */}
                   <div>
                     <label className="block text-sm font-semibold text-gray-900 mb-2">
                       Correct Answer *
                     </label>
-                    {formData.question_type === 'multiple_choice' ? (
-                      <select
-                        value={formData.correct_answer}
-                        onChange={(e) => setFormData({...formData, correct_answer: e.target.value})}
-                        className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-gray-900"
-                        required
-                      >
-                        <option value="">Select correct option...</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
-                      </select>
-                    ) : (
-                      <select
-                        value={formData.correct_answer}
-                        onChange={(e) => setFormData({...formData, correct_answer: e.target.value})}
-                        className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-gray-900"
-                        required
-                      >
-                        <option value="">Select...</option>
-                        <option value="true">True</option>
-                        <option value="false">False</option>
-                      </select>
-                    )}
+                    <select
+                      value={formData.correct_answer}
+                      onChange={(e) => setFormData({...formData, correct_answer: e.target.value})}
+                      className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-gray-900"
+                      required
+                    >
+                      <option value="">Select correct option...</option>
+                      <option value="A">A</option>
+                      <option value="B">B</option>
+                      <option value="C">C</option>
+                      <option value="D">D</option>
+                    </select>
                   </div>
 
                   {/* Explanation */}
@@ -437,7 +408,7 @@ function AdminQuestionsContent() {
                             {question.points} pts
                           </span>
                           <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
-                            {question.question_type.replace('_', ' ')}
+                            Multiple Choice
                           </span>
                         </div>
                         
@@ -445,7 +416,7 @@ function AdminQuestionsContent() {
                           {question.question_text}
                         </h3>
                         
-                        {question.question_type === 'multiple_choice' && question.options && (
+                        {question.options && (
                           <div className="grid grid-cols-2 gap-2 mb-3">
                             {Object.entries(question.options).map(([key, value]) => (
                               <div key={key} className={`p-2 rounded-lg text-sm ${
@@ -456,15 +427,6 @@ function AdminQuestionsContent() {
                                 <span className="font-semibold">{key}:</span> {value}
                               </div>
                             ))}
-                          </div>
-                        )}
-                        
-                        {question.question_type === 'true_false' && (
-                          <div className="mb-3">
-                            <span className="text-sm text-gray-800">Correct Answer: </span>
-                            <span className="font-semibold text-green-600">
-                              {question.correct_answer === 'true' ? 'True' : 'False'}
-                            </span>
                           </div>
                         )}
                         
