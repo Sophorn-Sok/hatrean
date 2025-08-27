@@ -67,24 +67,16 @@ function AdminPageContent() {
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-8">
-              <h1 className="text-2xl font-bold text-gray-800">⚙️ Admin Dashboard</h1>
-              <nav className="flex items-center gap-6">
-                <Link href="/admin/questions" className="text-gray-600 hover:text-purple-600 font-medium">
-                  📝 Questions
-                </Link>
-                <Link href="/admin/sessions" className="text-gray-600 hover:text-purple-600 font-medium">
-                  🎯 Sessions
-                </Link>
-                <Link href="/admin/leaderboard" className="text-gray-600 hover:text-purple-600 font-medium">
-                  📊 Leaderboard
-                </Link>
-              </nav>
-            </div>
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-600">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+          <div className="flex flex-wrap justify-between items-center gap-4">
+            <h1 className="text-xl md:text-2xl font-bold text-gray-800">⚙️ Admin Dashboard</h1>
+            <nav className="flex items-center gap-4 md:gap-6 order-3 md:order-2 w-full md:w-auto">
+              <Link href="/admin/questions" className="text-gray-600 hover:text-purple-600 font-medium">📝 Questions</Link>
+              <Link href="/admin/sessions" className="text-gray-600 hover:text-purple-600 font-medium">🎯 Sessions</Link>
+              <Link href="/admin/leaderboard" className="text-gray-600 hover:text-purple-600 font-medium">📊 Leaderboard</Link>
+            </nav>
+            <div className="flex items-center gap-4 order-2 md:order-3">
+              <span className="text-sm text-gray-600 hidden sm:inline">
                 Admin: {userProfile?.username || user?.email || 'User'} 👋
               </span>
               <Link href="/homepage" className="text-purple-600 hover:text-purple-800">
@@ -101,19 +93,19 @@ function AdminPageContent() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {/* Welcome Section */}
         <section className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-transparent bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text mb-4">
             Welcome to Admin Panel! 🚀
           </h2>
-          <p className="text-xl text-gray-600 mb-8">
+          <p className="text-lg md:text-xl text-gray-600 mb-8">
             Manage your quiz platform with powerful admin tools
           </p>
         </section>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-12">
           <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
@@ -166,12 +158,12 @@ function AdminPageContent() {
         {/* Quick Actions */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Management Tools */}
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+          <div className="bg-white rounded-2xl p-6 md:p-8 shadow-lg border border-gray-100">
             <h3 className="text-2xl font-bold text-gray-800 mb-6">🛠️ Management Tools</h3>
             <div className="space-y-4">
               <Link href="/admin/questions">
                 <div className="flex items-center gap-4 p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-colors cursor-pointer">
-                  <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center flex-shrink-0">
                     <span className="text-white text-xl">📝</span>
                   </div>
                   <div>
@@ -183,7 +175,7 @@ function AdminPageContent() {
 
               <Link href="/admin/sessions">
                 <div className="flex items-center gap-4 p-4 bg-green-50 rounded-xl hover:bg-green-100 transition-colors cursor-pointer">
-                  <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center flex-shrink-0">
                     <span className="text-white text-xl">🎯</span>
                   </div>
                   <div>
@@ -195,7 +187,7 @@ function AdminPageContent() {
 
               <Link href="/admin/leaderboard">
                 <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors cursor-pointer">
-                  <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center flex-shrink-0">
                     <span className="text-white text-xl">📊</span>
                   </div>
                   <div>
@@ -208,7 +200,7 @@ function AdminPageContent() {
           </div>
 
           {/* Active Sessions */}
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+          <div className="bg-white rounded-2xl p-6 md:p-8 shadow-lg border border-gray-100">
             <h3 className="text-2xl font-bold text-gray-800 mb-6">🔥 Active Sessions</h3>
             {activeSessions.length === 0 ? (
               <div className="text-center py-8">
@@ -223,20 +215,16 @@ function AdminPageContent() {
               <div className="space-y-4 max-h-64 overflow-y-auto">
                 {activeSessions.map((session) => (
                   <div key={session.id} className="border border-gray-200 rounded-xl p-4">
-                    <div className="flex justify-between items-start">
+                    <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
                       <div>
                         <h4 className="font-semibold text-gray-800">{session.title}</h4>
                         <p className="text-sm text-gray-600">Code: {session.session_code}</p>
-                        <span className={`inline-block px-2 py-1 rounded-full text-xs font-semibold mt-2 ${
-                          session.status === 'waiting' ? 'bg-yellow-100 text-yellow-800' :
-                          session.status === 'active' ? 'bg-green-100 text-green-800' :
-                          'bg-blue-100 text-blue-800'
-                        }`}>
+                        <span className={`inline-block px-2 py-1 rounded-full text-xs font-semibold mt-2 ${session.status === 'waiting' ? 'bg-yellow-100 text-yellow-800' : session.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}`}>
                           {session.status.toUpperCase()}
                         </span>
                       </div>
                       <Link href="/admin/sessions">
-                        <button className="text-purple-600 hover:text-purple-800 text-sm font-semibold">
+                        <button className="text-purple-600 hover:text-purple-800 text-sm font-semibold mt-2 sm:mt-0">
                           Manage →
                         </button>
                       </Link>
@@ -249,9 +237,9 @@ function AdminPageContent() {
         </div>
 
         {/* Categories Overview */}
-        <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+        <div className="bg-white rounded-2xl p-6 md:p-8 shadow-lg border border-gray-100">
           <h3 className="text-2xl font-bold text-gray-800 mb-6">📚 Categories Overview</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {categories.map((category) => (
               <div key={category.id} className="text-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
                 <div className={`w-12 h-12 ${category.icon_bg} rounded-xl flex items-center justify-center mx-auto mb-2`}>

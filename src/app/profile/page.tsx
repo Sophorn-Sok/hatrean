@@ -90,7 +90,7 @@ function ProfileContent() {
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-100">
-        <div className="max-w-7xl mx-auto flex justify-between items-center p-4 px-6">
+        <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center p-4 px-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center overflow-hidden">
               <Image 
@@ -101,10 +101,10 @@ function ProfileContent() {
                 className="object-contain"
               />
             </div>
-            <h1 className="text-2xl font-bold text-purple-700">User Profile</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-purple-700">User Profile</h1>
           </div>
           <Link href="/homepage">
-            <button className="px-4 py-2 text-sm text-gray-600 hover:text-purple-600 transition-colors">
+            <button className="px-4 py-2 text-sm text-gray-600 hover:text-purple-600 transition-colors mt-4 sm:mt-0">
               ← Back to Homepage
             </button>
           </Link>
@@ -112,11 +112,11 @@ function ProfileContent() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid lg:grid-cols-3 gap-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Profile Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
+            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border border-gray-100">
               <div className="text-center mb-6">
                 <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-3xl text-white">👤</span>
@@ -158,7 +158,7 @@ function ProfileContent() {
 
           {/* Quiz History */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
+            <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border border-gray-100">
               <h3 className="text-2xl font-bold text-gray-800 mb-6">Quiz History 📚</h3>
               
               {quizHistory.length === 0 ? (
@@ -175,8 +175,8 @@ function ProfileContent() {
               ) : (
                 <div className="space-y-4">
                   {quizHistory.map((attempt) => (
-                    <div key={attempt.id} className="border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow">
-                      <div className="flex justify-between items-start mb-4">
+                    <div key={attempt.id} className="border border-gray-200 rounded-xl p-4 sm:p-6 hover:shadow-md transition-shadow">
+                      <div className="flex flex-col sm:flex-row justify-between items-start mb-4 gap-2">
                         <div>
                           <h4 className="font-bold text-lg text-gray-800">
                             {attempt.questions_data?.quiz_type === 'mixed' 
@@ -187,7 +187,7 @@ function ProfileContent() {
                             {formatDate(attempt.completed_at)}
                           </p>
                         </div>
-                        <div className="text-right">
+                        <div className="text-left sm:text-right">
                           <div className="text-2xl font-bold text-purple-600">{attempt.score}</div>
                           <div className="text-sm text-gray-500">points</div>
                         </div>

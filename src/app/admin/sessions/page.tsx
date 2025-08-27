@@ -140,30 +140,28 @@ function AdminSessionsContent() {
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-8">
-              <h1 className="text-2xl font-bold text-gray-800">🎯 Session Manager</h1>
-              <nav className="flex items-center gap-6">
-                <a href="/admin" className="text-gray-800 hover:text-purple-600 font-medium">Dashboard</a>
-                <a href="/admin/questions" className="text-gray-800 hover:text-purple-600 font-medium">Questions</a>
-                <a href="/admin/leaderboard" className="text-gray-800 hover:text-purple-600 font-medium">Leaderboard</a>
-              </nav>
-            </div>
-            <a href="/homepage" className="text-purple-700 hover:text-purple-900 font-medium">← Back to Home</a>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+          <div className="flex flex-wrap justify-between items-center gap-4">
+            <h1 className="text-xl md:text-2xl font-bold text-gray-800">🎯 Session Manager</h1>
+            <nav className="flex items-center gap-4 md:gap-6 order-3 md:order-2 w-full md:w-auto">
+              <a href="/admin" className="text-gray-800 hover:text-purple-600 font-medium">Dashboard</a>
+              <a href="/admin/questions" className="text-gray-800 hover:text-purple-600 font-medium">Questions</a>
+              <a href="/admin/leaderboard" className="text-gray-800 hover:text-purple-600 font-medium">Leaderboard</a>
+            </nav>
+            <a href="/homepage" className="text-purple-700 hover:text-purple-900 font-medium order-2 md:order-3">← Back to Home</a>
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {/* Actions */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
           <h2 className="text-2xl font-bold text-gray-900">
             Quiz Sessions ({sessions.length})
           </h2>
           <button
             onClick={() => setShowCreateForm(true)}
-            className="bg-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-purple-700 transition-colors"
+            className="w-full sm:w-auto bg-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-purple-700 transition-colors"
           >
             + Create Session
           </button>
@@ -274,7 +272,7 @@ function AdminSessionsContent() {
                         ...formData,
                         settings: {...formData.settings, shuffle_questions: e.target.checked}
                       })}
-                      className="mr-3"
+                      className="mr-3 h-4 w-4 rounded text-purple-600 focus:ring-purple-500"
                     />
                     <span className="text-sm text-gray-900">Shuffle question order</span>
                   </label>
@@ -286,7 +284,7 @@ function AdminSessionsContent() {
                         ...formData,
                         settings: {...formData.settings, show_answers: e.target.checked}
                       })}
-                      className="mr-3"
+                      className="mr-3 h-4 w-4 rounded text-purple-600 focus:ring-purple-500"
                     />
                     <span className="text-sm text-gray-900">Show correct answers after submission</span>
                   </label>
@@ -298,14 +296,14 @@ function AdminSessionsContent() {
                         ...formData,
                         settings: {...formData.settings, allow_review: e.target.checked}
                       })}
-                      className="mr-3"
+                      className="mr-3 h-4 w-4 rounded text-purple-600 focus:ring-purple-500"
                     />
                     <span className="text-sm text-gray-900">Allow participants to review answers</span>
                   </label>
                 </div>
               </div>
 
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <button
                   type="submit"
                   disabled={loading}
@@ -337,9 +335,9 @@ function AdminSessionsContent() {
             ) : (
               sessions.map((session) => (
                 <div key={session.id} className="bg-white rounded-2xl p-6 shadow-lg">
-                  <div className="flex justify-between items-start mb-4">
+                  <div className="flex flex-col sm:flex-row justify-between items-start mb-4 gap-4">
                     <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
+                      <div className="flex items-center flex-wrap gap-3 mb-2">
                         <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(session.status)}`}>
                           {session.status.toUpperCase()}
                         </span>
@@ -408,12 +406,12 @@ function AdminSessionsContent() {
             </h3>
             
             {selectedSession ? (
-              <div className="space-y-3">
+              <div className="space-y-3 max-h-96 overflow-y-auto">
                 {participants.length === 0 ? (
                   <p className="text-gray-900 text-center py-4 font-medium">No participants yet</p>
                 ) : (
                   participants.map((participant) => (
-                    <div key={participant.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                    <div key={participant.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 bg-gray-50 rounded-lg gap-2">
                       <div>
                         <p className="font-semibold text-gray-900">
                           {participant.user_profiles?.username || 'Unknown User'}
@@ -423,7 +421,7 @@ function AdminSessionsContent() {
                         </p>
                       </div>
                       {participant.quiz_attempts && (
-                        <div className="text-right">
+                        <div className="text-left sm:text-right">
                           <p className="font-semibold text-green-700">
                             Score: {participant.quiz_attempts.score}
                           </p>

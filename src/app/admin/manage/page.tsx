@@ -183,15 +183,15 @@ function ManageQuestionsPageContent() {
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-100">
-        <div className="max-w-7xl mx-auto flex justify-between items-center p-4 px-6">
+        <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center p-4 px-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
               <span className="text-white font-bold text-lg">👑</span>
             </div>
-            <h1 className="text-2xl font-bold text-purple-700">Hat rean</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-purple-700">Hat rean</h1>
           </div>
           
-          <nav className="flex items-center gap-8">
+          <nav className="flex items-center gap-4 md:gap-8 mt-4 md:mt-0 w-full md:w-auto justify-center">
             <Link href="/homepage" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium">
               🏠 Home
             </Link>
@@ -206,8 +206,8 @@ function ManageQuestionsPageContent() {
             </Link>
           </nav>
 
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">
+          <div className="flex items-center gap-4 mt-4 md:mt-0">
+            <span className="text-sm text-gray-600 hidden sm:inline">
               Hi, {user?.user_metadata?.username || user?.email || 'Admin'}! 👋
             </span>
             <button 
@@ -220,20 +220,20 @@ function ManageQuestionsPageContent() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto p-6">
-        <div className="grid lg:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Panel - Questions List */}
           <div className="lg:col-span-2">
             {/* Header Section */}
             <div className="mb-6">
-              <h2 className="text-3xl font-bold text-gray-800 mb-2">Manage Questions</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Manage Questions</h2>
               <p className="text-gray-600">{questions.length} questions found</p>
             </div>
 
             {/* Filters and Search */}
-            <div className="bg-white rounded-2xl p-6 shadow-lg mb-6">
-              <div className="flex flex-wrap gap-4 items-center">
-                <div className="flex-1 min-w-64">
+            <div className="bg-white rounded-2xl p-4 md:p-6 shadow-lg mb-6">
+              <div className="flex flex-col md:flex-row gap-4 items-center">
+                <div className="w-full md:flex-1">
                   <div className="relative">
                     <input
                       type="text"
@@ -246,31 +246,33 @@ function ManageQuestionsPageContent() {
                   </div>
                 </div>
                 
-                <select
-                  value={categoryFilter}
-                  onChange={(e) => setCategoryFilter(e.target.value)}
-                  className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none bg-white text-gray-800 font-semibold"
-                >
-                  <option value="">Category</option>
-                  {categories.map(cat => (
-                    <option key={cat} value={cat}>{cat}</option>
-                  ))}
-                </select>
-                
-                <select
-                  value={difficultyFilter}
-                  onChange={(e) => setDifficultyFilter(e.target.value)}
-                  className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none bg-white text-gray-800 font-semibold"
-                >
-                  <option value="">Difficulty</option>
-                  {difficulties.map(diff => (
-                    <option key={diff} value={diff}>{diff}</option>
-                  ))}
-                </select>
+                <div className="w-full md:w-auto flex gap-4">
+                  <select
+                    value={categoryFilter}
+                    onChange={(e) => setCategoryFilter(e.target.value)}
+                    className="w-full md:w-auto px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none bg-white text-gray-800 font-semibold"
+                  >
+                    <option value="">Category</option>
+                    {categories.map(cat => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                  </select>
+                  
+                  <select
+                    value={difficultyFilter}
+                    onChange={(e) => setDifficultyFilter(e.target.value)}
+                    className="w-full md:w-auto px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none bg-white text-gray-800 font-semibold"
+                  >
+                    <option value="">Difficulty</option>
+                    {difficulties.map(diff => (
+                      <option key={diff} value={diff}>{diff}</option>
+                    ))}
+                  </select>
+                </div>
                 
                 <button
                   onClick={handleCreateNew}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transition-all"
+                  className="w-full md:w-auto bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transition-all"
                 >
                   New question
                 </button>
@@ -282,11 +284,11 @@ function ManageQuestionsPageContent() {
               <h3 className="text-xl font-bold text-gray-800 mb-4">Questions</h3>
               <div className="space-y-4">
                 {filteredQuestions.map((question) => (
-                  <div key={question.id} className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow">
-                    <div className="flex justify-between items-start mb-4">
+                  <div key={question.id} className="bg-white rounded-2xl p-4 md:p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow">
+                    <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                       <div className="flex-1">
                         <h4 className="text-lg font-semibold text-gray-800 mb-2">{question.question}</h4>
-                        <div className="flex items-center gap-4 mb-2">
+                        <div className="flex flex-wrap items-center gap-2 md:gap-4 mb-2">
                           <span className="text-sm font-medium text-gray-600">{question.category}</span>
                           <span className={`px-3 py-1 rounded-full text-xs font-medium ${getDifficultyColor(question.difficulty)}`}>
                             {question.difficulty}
@@ -298,7 +300,7 @@ function ManageQuestionsPageContent() {
                         <p className="text-sm text-gray-500">Updated {question.updatedDate} • {question.answers} answers</p>
                       </div>
                       
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 self-start sm:self-center">
                         <button
                           onClick={() => setSelectedQuestion(question)}
                           className="p-2 text-gray-400 hover:text-purple-600 transition-colors"
@@ -408,7 +410,7 @@ function ManageQuestionsPageContent() {
                       </select>
                     </div>
                     
-                    <div className="flex gap-3 pt-4">
+                    <div className="flex flex-col sm:flex-row gap-3 pt-4">
                       <button
                         onClick={handleSave}
                         className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transition-all"
@@ -422,7 +424,7 @@ function ManageQuestionsPageContent() {
                           setSelectedQuestion(null);
                           setEditForm({});
                         }}
-                        className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition-all"
+                        className="flex-1 sm:flex-none px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition-all"
                       >
                         Cancel
                       </button>
@@ -439,7 +441,7 @@ function ManageQuestionsPageContent() {
                       <p className="text-gray-800 bg-gray-50 p-3 rounded-xl">{selectedQuestion.question}</p>
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
                         <p className="text-gray-800">{selectedQuestion.category}</p>
@@ -473,7 +475,7 @@ function ManageQuestionsPageContent() {
                       </div>
                     </div>
                     
-                    <div className="flex gap-3 pt-4">
+                    <div className="flex flex-col sm:flex-row gap-3 pt-4">
                       <button
                         onClick={() => handleEdit(selectedQuestion)}
                         className="flex-1 bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition-all"
@@ -482,7 +484,7 @@ function ManageQuestionsPageContent() {
                       </button>
                       <button
                         onClick={() => handleDelete(selectedQuestion.id)}
-                        className="px-6 py-3 bg-red-600 text-white rounded-xl font-semibold hover:bg-red-700 transition-all"
+                        className="flex-1 sm:flex-none px-6 py-3 bg-red-600 text-white rounded-xl font-semibold hover:bg-red-700 transition-all"
                       >
                         Delete
                       </button>
@@ -491,7 +493,7 @@ function ManageQuestionsPageContent() {
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <div className="text-6xl mb-4 opacity-30">👁️</div>
+                  <div className="text-5xl md:text-6xl mb-4 opacity-30">👁️</div>
                   <h3 className="text-lg font-semibold text-gray-400 mb-2">Select a question to view details</h3>
                   <p className="text-gray-400">Click on any question from the list to see its details here</p>
                 </div>

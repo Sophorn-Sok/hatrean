@@ -57,7 +57,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-50 to-indigo-100">
       {/* Header */}
-      <header className="flex justify-between items-center p-6 px-8">
+      <header className="flex flex-wrap justify-between items-center p-4 sm:p-6 px-4 sm:px-8">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center overflow-hidden">
             <Image 
@@ -68,9 +68,9 @@ export default function LoginPage() {
               className="object-contain"
             />
           </div>
-          <h1 className="text-2xl font-bold text-purple-700">Hat rean</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-purple-700">Hat rean</h1>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-3 mt-4 sm:mt-0 w-full sm:w-auto justify-center">
           <button className="px-6 py-2 border border-purple-300 text-purple-700 rounded-full hover:bg-purple-50 transition-colors">
             Login
           </button>
@@ -84,7 +84,7 @@ export default function LoginPage() {
 
       {/* Main Content */}
       <div className="flex items-center justify-center px-4 py-8">
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-8 w-full max-w-md">
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-6 sm:p-8 w-full max-w-md">
           {/* Game Controller Icon */}
           <div className="flex justify-center mb-6">
             <div className="w-16 h-16 bg-gray-600 rounded-lg flex items-center justify-center">

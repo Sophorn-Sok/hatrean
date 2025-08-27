@@ -113,7 +113,7 @@ function LeaderboardPageContent() {
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-100">
-        <div className="max-w-7xl mx-auto flex justify-between items-center p-4 px-6">
+        <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center p-4 px-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center overflow-hidden">
               <Image 
@@ -124,30 +124,30 @@ function LeaderboardPageContent() {
                 className="object-contain"
               />
             </div>
-            <h1 className="text-2xl font-bold text-purple-700">Hat rean</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-purple-700">Hat rean</h1>
           </div>
           
-          <nav className="flex items-center gap-8">
+          <nav className="flex items-center gap-4 md:gap-8 mt-4 md:mt-0 w-full md:w-auto justify-center">
             <Link href="/homepage" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium">
-              🏠 Home
+              <span className="hidden md:inline">🏠</span> Home
             </Link>
             <Link href="/admin/leaderboard" className="flex items-center gap-2 text-purple-600 font-medium">
-              📊 Leaderboard
+              <span className="hidden md:inline">📊</span> Leaderboard
             </Link>
             {!loadingProfile && isAdmin && (
               <>
                 <Link href="/admin" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium">
-                  ⚙️ Admin
+                  <span className="hidden md:inline">⚙️</span> Admin
                 </Link>
                 <Link href="/admin/manage" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium">
-                  📝 Manage
+                  <span className="hidden md:inline">📝</span> Manage
                 </Link>
               </>
             )}
           </nav>
 
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">
+          <div className="flex items-center gap-4 mt-4 md:mt-0">
+            <span className="text-sm text-gray-600 hidden sm:inline">
               Hi, {user?.user_metadata?.username || user?.email || 'Admin'}! 👋
             </span>
             <button 
@@ -160,12 +160,12 @@ function LeaderboardPageContent() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {/* Loading State */}
         {loading && (
           <div className="text-center py-16">
-            <div className="text-6xl mb-4">⏳</div>
-            <h3 className="text-2xl font-bold text-gray-600 mb-2">Loading Leaderboard...</h3>
+            <div className="text-5xl md:text-6xl mb-4">⏳</div>
+            <h3 className="text-xl md:text-2xl font-bold text-gray-600 mb-2">Loading Leaderboard...</h3>
             <p className="text-gray-500">Fetching the latest rankings!</p>
           </div>
         )}
@@ -173,8 +173,8 @@ function LeaderboardPageContent() {
         {/* Error State */}
         {error && (
           <div className="text-center py-16">
-            <div className="text-6xl mb-4">❌</div>
-            <h3 className="text-2xl font-bold text-red-600 mb-2">Error Loading Data</h3>
+            <div className="text-5xl md:text-6xl mb-4">❌</div>
+            <h3 className="text-xl md:text-2xl font-bold text-red-600 mb-2">Error Loading Data</h3>
             <p className="text-gray-500 mb-4">{error}</p>
             <button 
               onClick={loadLeaderboardData}
@@ -190,22 +190,22 @@ function LeaderboardPageContent() {
           <>
             {/* Hall of Fame Title */}
             <div className="text-center mb-12">
-              <div className="flex items-center justify-center gap-4 mb-4">
-                <div className="text-6xl">🏆</div>
-                <h2 className="text-5xl font-bold text-transparent bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text">
+              <div className="flex items-center justify-center gap-2 md:gap-4 mb-4">
+                <div className="text-4xl md:text-6xl">🏆</div>
+                <h2 className="text-3xl md:text-5xl font-bold text-transparent bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text">
                   Hall of Fame
                 </h2>
-                <div className="text-6xl">🏆</div>
+                <div className="text-4xl md:text-6xl">🏆</div>
               </div>
-              <p className="text-xl text-gray-600">See who&apos;s crushing it in the quiz world! ⚡</p>
+              <p className="text-lg md:text-xl text-gray-600">See who&apos;s crushing it in the quiz world! ⚡</p>
             </div>
 
             {/* Top 3 Podium */}
             {filteredPlayers.length > 0 && (
-              <div className="flex justify-center items-end gap-8 mb-16">
+              <div className="flex flex-col md:flex-row justify-center items-center md:items-end gap-8 mb-16">
                 {/* Second Place */}
                 {topThree[1] && (
-                  <div className="bg-white rounded-3xl p-6 shadow-lg border-2 border-gray-200 text-center w-64">
+                  <div className="bg-white rounded-3xl p-6 shadow-lg border-2 border-gray-200 text-center w-full max-w-xs md:w-64 order-2 md:order-1">
                     <div className={`w-20 h-20 ${getRankColor(2)} rounded-full flex items-center justify-center mx-auto mb-4 border-4`}>
                       <span className="text-3xl">{getRankIcon(2)}</span>
                     </div>
@@ -220,9 +220,9 @@ function LeaderboardPageContent() {
 
                 {/* First Place - Highlighted */}
                 {topThree[0] && (
-                  <div className="relative">
+                  <div className="relative w-full max-w-xs md:w-80 order-1 md:order-2">
                     <div className="absolute -inset-3 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-3xl opacity-30 blur-xl"></div>
-                    <div className="relative bg-white rounded-3xl p-8 shadow-xl border-4 border-yellow-400 text-center w-80 transform scale-110">
+                    <div className="relative bg-white rounded-3xl p-8 shadow-xl border-4 border-yellow-400 text-center transform md:scale-110">
                       <div className={`w-24 h-24 ${getRankColor(1)} rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-yellow-500`}>
                         <span className="text-4xl">{getRankIcon(1)}</span>
                       </div>
@@ -238,7 +238,7 @@ function LeaderboardPageContent() {
 
                 {/* Third Place */}
                 {topThree[2] && (
-                  <div className="bg-white rounded-3xl p-6 shadow-lg border-2 border-orange-200 text-center w-64">
+                  <div className="bg-white rounded-3xl p-6 shadow-lg border-2 border-orange-200 text-center w-full max-w-xs md:w-64 order-3 md:order-3">
                     <div className={`w-20 h-20 ${getRankColor(3)} rounded-full flex items-center justify-center mx-auto mb-4 border-4`}>
                       <span className="text-3xl">{getRankIcon(3)}</span>
                     </div>
@@ -255,53 +255,42 @@ function LeaderboardPageContent() {
 
             {/* Complete Rankings */}
             {filteredPlayers.length > 0 && (
-              <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-3xl p-8 shadow-xl">
+              <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-3xl p-4 md:p-8 shadow-xl">
                 <div className="flex items-center gap-4 mb-8">
                   <div className="bg-white/20 p-3 rounded-2xl">
-                    <span className="text-3xl">⭐</span>
+                    <span className="text-2xl md:text-3xl">⭐</span>
                   </div>
-                  <h3 className="text-3xl font-bold text-white">Complete Rankings ⭐</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold text-white">Complete Rankings</h3>
                 </div>
 
                 <div className="space-y-4">
                   {/* Include all players */}
                   {filteredPlayers.map((player) => (
-                    <div key={player.id} className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-6">
-                          <div className="flex items-center gap-4">
-                            <div className={`w-12 h-12 ${getRankColor(player.rank)} rounded-full flex items-center justify-center border-2`}>
-                              <span className="text-xl font-bold">{getRankIcon(player.rank)}</span>
-                            </div>
-                            <div>
-                              <h4 className="text-xl font-bold text-gray-800">{player.username}</h4>
-                              <p className="text-sm text-gray-600">{player.full_name}</p>
-                            </div>
+                    <div key={player.id} className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 md:p-6 shadow-lg">
+                      <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div className="flex items-center gap-4 w-full md:w-auto">
+                          <div className={`w-12 h-12 ${getRankColor(player.rank)} rounded-full flex items-center justify-center border-2 flex-shrink-0`}>
+                            <span className="text-xl font-bold">{getRankIcon(player.rank)}</span>
                           </div>
-                          
-                          <div className="flex items-center gap-4">
-                            <span className="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-semibold">
-                              Champions
-                            </span>
-                            <span className="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm">
-                              All Categories
-                            </span>
+                          <div className="flex-grow">
+                            <h4 className="text-lg md:text-xl font-bold text-gray-800">{player.username}</h4>
+                            <p className="text-sm text-gray-600">{player.full_name}</p>
                           </div>
                         </div>
                         
-                        <div className="text-right">
-                          <div className="flex items-center gap-6">
-                            <div className="text-right">
-                              <div className="text-2xl font-bold text-gray-800">{player.total_score}</div>
-                              <div className="text-sm text-gray-600">Total Points</div>
+                        <div className="w-full md:w-auto">
+                          <div className="flex flex-wrap items-center justify-start md:justify-end gap-2 md:gap-6">
+                            <div className="text-center md:text-right">
+                              <div className="text-xl md:text-2xl font-bold text-gray-800">{player.total_score}</div>
+                              <div className="text-xs md:text-sm text-gray-600">Total Points</div>
                             </div>
-                            <div className="text-right">
-                              <div className="text-xl font-bold text-green-600">{player.total_quizzes}</div>
-                              <div className="text-sm text-gray-500">Quizzes</div>
+                            <div className="text-center md:text-right">
+                              <div className="text-lg md:text-xl font-bold text-green-600">{player.total_quizzes}</div>
+                              <div className="text-xs md:text-sm text-gray-500">Quizzes</div>
                             </div>
-                            <div className="text-right">
-                              <div className="text-lg font-bold text-purple-600">{player.average_score}</div>
-                              <div className="text-sm text-gray-500">Avg Score</div>
+                            <div className="text-center md:text-right">
+                              <div className="text-base md:text-lg font-bold text-purple-600">{player.average_score}</div>
+                              <div className="text-xs md:text-sm text-gray-500">Avg Score</div>
                             </div>
                           </div>
                         </div>

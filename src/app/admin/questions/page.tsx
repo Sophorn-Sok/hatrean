@@ -26,7 +26,7 @@ function AdminQuestionsContent() {
 
   const [formData, setFormData] = useState({
     question_text: '',
-    question_type: 'multiple_choice' as 'multiple_choice',
+    question_type: 'multiple_choice' as const,
     difficulty: 'medium' as 'easy' | 'medium' | 'hard',
     options: { A: '', B: '', C: '', D: '' } as Record<string, string>,
     correct_answer: '',
@@ -177,22 +177,20 @@ function AdminQuestionsContent() {
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-8">
-              <h1 className="text-2xl font-bold text-gray-900">📝 Question Manager</h1>
-              <nav className="flex items-center gap-6">
-                <a href="/admin" className="text-gray-800 hover:text-purple-600 font-medium">Dashboard</a>
-                <a href="/admin/sessions" className="text-gray-800 hover:text-purple-600 font-medium">Sessions</a>
-                <a href="/admin/leaderboard" className="text-gray-800 hover:text-purple-600 font-medium">Leaderboard</a>
-              </nav>
-            </div>
-            <a href="/homepage" className="text-purple-600 hover:text-purple-800">← Back to Home</a>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+          <div className="flex flex-wrap justify-between items-center gap-4">
+            <h1 className="text-xl md:text-2xl font-bold text-gray-900">📝 Question Manager</h1>
+            <nav className="flex items-center gap-4 md:gap-6 order-3 md:order-2 w-full md:w-auto">
+              <a href="/admin" className="text-gray-800 hover:text-purple-600 font-medium">Dashboard</a>
+              <a href="/admin/sessions" className="text-gray-800 hover:text-purple-600 font-medium">Sessions</a>
+              <a href="/admin/leaderboard" className="text-gray-800 hover:text-purple-600 font-medium">Leaderboard</a>
+            </nav>
+            <a href="/homepage" className="text-purple-600 hover:text-purple-800 order-2 md:order-3">← Back to Home</a>
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {/* Category Selection */}
         <div className="bg-white rounded-2xl p-6 shadow-lg mb-8">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Select Category</h2>
@@ -213,11 +211,11 @@ function AdminQuestionsContent() {
         {selectedCategory && (
           <>
             {/* Actions */}
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
               <h2 className="text-2xl font-bold text-gray-900">
                 Questions ({questions.length})
               </h2>
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                 <button
                   onClick={handleDebugUser}
                   className="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 transition-colors"
@@ -359,7 +357,7 @@ function AdminQuestionsContent() {
                   </div>
 
                   {/* Submit Button */}
-                  <div className="flex gap-4">
+                  <div className="flex flex-col sm:flex-row gap-4">
                     <button
                       type="submit"
                       disabled={loading}
@@ -394,14 +392,10 @@ function AdminQuestionsContent() {
               ) : (
                 questions.map((question) => (
                   <div key={question.id} className="bg-white rounded-2xl p-6 shadow-lg">
-                    <div className="flex justify-between items-start">
+                    <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                       <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-3">
-                          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            question.difficulty === 'easy' ? 'bg-green-100 text-green-800' :
-                            question.difficulty === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
+                        <div className="flex flex-wrap items-center gap-3 mb-3">
+                          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${question.difficulty === 'easy' ? 'bg-green-100 text-green-800' : question.difficulty === 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}`}>
                             {question.difficulty}
                           </span>
                           <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">
@@ -417,13 +411,9 @@ function AdminQuestionsContent() {
                         </h3>
                         
                         {question.options && (
-                          <div className="grid grid-cols-2 gap-2 mb-3">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
                             {Object.entries(question.options).map(([key, value]) => (
-                              <div key={key} className={`p-2 rounded-lg text-sm ${
-                                key === question.correct_answer 
-                                  ? 'bg-green-100 text-green-800 font-semibold' 
-                                  : 'bg-gray-50 text-gray-800'
-                              }`}>
+                              <div key={key} className={`p-2 rounded-lg text-sm ${key === question.correct_answer ? 'bg-green-100 text-green-800 font-semibold' : 'bg-gray-50 text-gray-800'}`}>
                                 <span className="font-semibold">{key}:</span> {value}
                               </div>
                             ))}
@@ -438,7 +428,7 @@ function AdminQuestionsContent() {
                         )}
                       </div>
                       
-                      <div className="flex gap-2 ml-4">
+                      <div className="flex gap-2 ml-0 sm:ml-4 self-start sm:self-auto">
                         <button
                           onClick={() => handleEdit(question)}
                           className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition-colors"

@@ -579,10 +579,10 @@ function QuizContent() {
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-100">
-        <div className="max-w-4xl mx-auto px-6 py-4">
-            <div className="flex justify-between items-center">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4">
+            <div className="flex flex-wrap justify-between items-center gap-2">
             <div>
-              <h1 className="text-xl font-bold text-gray-800">
+              <h1 className="text-lg md:text-xl font-bold text-gray-800">
                 {session ? `${session.title} - ${session.session_code}` : 
                  quizMode === 'instant' ? 'Mixed Quiz' : `${categoryName} Quiz`}
               </h1>
@@ -691,7 +691,7 @@ function QuizContent() {
           )}
 
           {/* Actions */}
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <button
               onClick={() => router.push('/homepage')}
               className="px-6 py-3 bg-gray-300 text-gray-800 rounded-xl font-semibold hover:bg-gray-400 transition-colors border border-gray-400"

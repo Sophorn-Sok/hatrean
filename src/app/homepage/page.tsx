@@ -101,7 +101,7 @@ function HomePageContent() {
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-100">
-        <div className="max-w-7xl mx-auto flex justify-between items-center p-4 px-6">
+        <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center p-4 px-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center overflow-hidden">
               <Image 
@@ -112,10 +112,10 @@ function HomePageContent() {
                 className="object-contain"
               />
             </div>
-            <h1 className="text-2xl font-bold text-purple-700">Hat rean</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-purple-700">Hat rean</h1>
           </div>
           
-          <nav className="flex items-center gap-8">
+          <nav className="flex items-center gap-4 md:gap-8 mt-4 md:mt-0 w-full md:w-auto justify-center">
             <Link href="/homepage" className="flex items-center gap-2 text-purple-600 font-medium">
               🏠 Home
             </Link>
@@ -132,8 +132,8 @@ function HomePageContent() {
             )}
           </nav>
 
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">
+          <div className="flex items-center gap-4 mt-4 md:mt-0">
+            <span className="text-sm text-gray-600 hidden sm:inline">
               Hi, {user?.user_metadata?.username || user?.email || 'User'}! 👋
             </span>
             <button 
@@ -147,7 +147,7 @@ function HomePageContent() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {/* Hero Section */}
         <section className="text-center mb-12">
           <h2 className="text-5xl md:text-6xl font-bold text-transparent bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text mb-4">
@@ -158,7 +158,7 @@ function HomePageContent() {
           </p>
 
           {/* Feature Icons */}
-          <div className="flex justify-center gap-12 mb-16">
+          <div className="flex flex-wrap justify-center gap-8 md:gap-12 mb-16">
             <div className="flex flex-col items-center group">
               <div className="w-20 h-20 bg-purple-200 rounded-3xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                 <span className="text-3xl">⚡</span>
@@ -305,7 +305,7 @@ function HomePageContent() {
                         <h4 className="font-bold text-gray-800 text-lg">
                           {player.username || player.full_name || 'Unknown Player'}
                         </h4>
-                        <div className="flex items-center gap-4 text-sm text-gray-600">
+                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-600">
                           <span className="flex items-center gap-1">
                             <span className="text-green-600">⭐</span>
                             {player.total_score} points
