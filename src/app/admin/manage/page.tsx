@@ -240,7 +240,7 @@ function ManageQuestionsPageContent() {
                       placeholder="Search questions..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none"
+                      className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-gray-800 font-semibold placeholder-gray-500"
                     />
                     <div className="absolute left-3 top-3.5 text-gray-400">🔍</div>
                   </div>
@@ -249,7 +249,7 @@ function ManageQuestionsPageContent() {
                 <select
                   value={categoryFilter}
                   onChange={(e) => setCategoryFilter(e.target.value)}
-                  className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none bg-white"
+                  className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none bg-white text-gray-800 font-semibold"
                 >
                   <option value="">Category</option>
                   {categories.map(cat => (
@@ -260,7 +260,7 @@ function ManageQuestionsPageContent() {
                 <select
                   value={difficultyFilter}
                   onChange={(e) => setDifficultyFilter(e.target.value)}
-                  className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none bg-white"
+                  className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none bg-white text-gray-800 font-semibold"
                 >
                   <option value="">Difficulty</option>
                   {difficulties.map(diff => (
@@ -343,7 +343,7 @@ function ManageQuestionsPageContent() {
                       <textarea
                         value={editForm.question || ''}
                         onChange={(e) => setEditForm({...editForm, question: e.target.value})}
-                        className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none h-20 resize-none"
+                        className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none h-20 resize-none text-gray-800 font-semibold placeholder-gray-500"
                         placeholder="Enter your question..."
                       />
                     </div>
@@ -353,7 +353,7 @@ function ManageQuestionsPageContent() {
                       <select
                         value={editForm.category || ''}
                         onChange={(e) => setEditForm({...editForm, category: e.target.value})}
-                        className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none bg-white"
+                        className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none bg-white text-gray-800 font-semibold"
                       >
                         <option value="">Select category</option>
                         {categories.map(cat => (
@@ -367,7 +367,7 @@ function ManageQuestionsPageContent() {
                       <select
                         value={editForm.difficulty || ''}
                         onChange={(e) => setEditForm({...editForm, difficulty: e.target.value})}
-                        className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none bg-white"
+                        className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none bg-white text-gray-800 font-semibold"
                       >
                         <option value="">Select difficulty</option>
                         {difficulties.map(diff => (
@@ -388,7 +388,7 @@ function ManageQuestionsPageContent() {
                             ...editForm, 
                             options: {...(editForm.options || {A: '', B: '', C: '', D: ''}), [option]: e.target.value}
                           })}
-                          className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none"
+                          className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-gray-800 font-semibold placeholder-gray-500"
                         />
                       ))}
                     </div>
@@ -398,7 +398,7 @@ function ManageQuestionsPageContent() {
                       <select
                         value={editForm.correctAnswer || ''}
                         onChange={(e) => setEditForm({...editForm, correctAnswer: e.target.value})}
-                        className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none bg-white"
+                        className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none bg-white text-gray-800 font-semibold"
                       >
                         <option value="">Select correct answer</option>
                         <option value="A">Option A</option>
