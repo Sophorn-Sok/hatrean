@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 export default function Home() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   // Background images for slideshow
   const backgroundImages = [
     'https://scontent.fpnh10-1.fna.fbcdn.net/v/t39.30808-6/481999772_966753138880356_4431833456804033463_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=127cfc&_nc_ohc=asKJZLF6AV8Q7kNvwHYE2ba&_nc_oc=AdmVciOi1BcNeg5sZXo4W7vBMwe0aQWPx0z9ANUzKQhcv5pwQD0a8IiI4DjorotM4FA&_nc_zt=23&_nc_ht=scontent.fpnh10-1.fna&_nc_gid=6cWuDxJn87ouu0yykTvEHA&oh=00_AfUDao2qSBr3VU2yeBxrHVMyXbhtZFLNInFUxA_A1UeRkw&oe=68B58455',
@@ -50,7 +51,7 @@ export default function Home() {
       description: 'Monitor your improvement with detailed analytics'
     },
     {
-      icon: '�',
+      icon: '🏆',
       title: 'Achievements',
       description: 'Unlock badges and rewards as you progress'
     },
@@ -105,7 +106,7 @@ export default function Home() {
             <a href="#about" className="text-gray-600 hover:text-blue-600 font-medium transition-colors">About</a>
           </nav>
           
-          <div className="flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-3">
             <Link href="/loginpage">
               <button className="px-6 py-2.5 text-gray-700 font-semibold hover:text-blue-600 transition-colors">
                 Login
@@ -117,7 +118,47 @@ export default function Home() {
               </button>
             </Link>
           </div>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden flex items-center">
+            <button 
+              onClick={() => setIsMenuOpen(!isMenuOpen)} 
+              className="text-gray-600 hover:text-blue-600 focus:outline-none p-2"
+              aria-label="Toggle menu"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                {isMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-white/95 backdrop-blur-lg shadow-lg border-t border-gray-200/50">
+            <nav className="flex flex-col items-center gap-4 py-6 px-6">
+              <a href="#features" className="text-gray-600 hover:text-blue-600 font-medium transition-colors py-2 w-full text-center" onClick={() => setIsMenuOpen(false)}>Features</a>
+              <a href="#categories" className="text-gray-600 hover:text-blue-600 font-medium transition-colors py-2 w-full text-center" onClick={() => setIsMenuOpen(false)}>Categories</a>
+              <a href="#about" className="text-gray-600 hover:text-blue-600 font-medium transition-colors py-2 w-full text-center" onClick={() => setIsMenuOpen(false)}>About</a>
+              <div className="flex flex-col items-center gap-4 mt-4 w-full">
+                <Link href="/loginpage" className="w-full">
+                  <button className="w-full px-6 py-3 text-gray-700 font-semibold hover:text-blue-600 transition-colors border border-gray-200 rounded-lg" onClick={() => setIsMenuOpen(false)}>
+                    Login
+                  </button>
+                </Link>
+                <Link href="/signuppage" className="w-full">
+                  <button className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl min-h-[48px] touch-manipulation" onClick={() => setIsMenuOpen(false)}>
+                    Get Started
+                  </button>
+                </Link>
+              </div>
+            </nav>
+          </div>
+        )}
       </header>
 
       {/* Hero Section with Background Image Slideshow */}
@@ -144,16 +185,17 @@ export default function Home() {
         </div>
         
         {/* Image Navigation Dots */}
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-30 flex space-x-3">
+        <div className="absolute bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 z-30 flex space-x-2 sm:space-x-3">
           {backgroundImages.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentImageIndex(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all duration-300 touch-manipulation ${
                 index === currentImageIndex 
                   ? 'bg-yellow-400 scale-125' 
                   : 'bg-white/50 hover:bg-white/70'
               }`}
+              aria-label={`Go to slide ${index + 1}`}
             />
           ))}
         </div>
@@ -161,18 +203,20 @@ export default function Home() {
         {/* Navigation Arrows */}
         <button
           onClick={() => setCurrentImageIndex(currentImageIndex === 0 ? backgroundImages.length - 1 : currentImageIndex - 1)}
-          className="absolute left-6 top-1/2 transform -translate-y-1/2 z-30 bg-white/20 backdrop-blur-md hover:bg-white/30 rounded-full p-3 transition-all duration-300 group"
+          className="absolute left-3 sm:left-6 top-1/2 transform -translate-y-1/2 z-30 bg-white/20 backdrop-blur-md hover:bg-white/30 rounded-full p-2 sm:p-3 transition-all duration-300 group touch-manipulation"
+          aria-label="Previous image"
         >
-          <svg className="w-6 h-6 text-white group-hover:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 sm:w-6 sm:h-6 text-white group-hover:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
         
         <button
           onClick={() => setCurrentImageIndex(currentImageIndex === backgroundImages.length - 1 ? 0 : currentImageIndex + 1)}
-          className="absolute right-6 top-1/2 transform -translate-y-1/2 z-30 bg-white/20 backdrop-blur-md hover:bg-white/30 rounded-full p-3 transition-all duration-300 group"
+          className="absolute right-3 sm:right-6 top-1/2 transform -translate-y-1/2 z-30 bg-white/20 backdrop-blur-md hover:bg-white/30 rounded-full p-2 sm:p-3 transition-all duration-300 group touch-manipulation"
+          aria-label="Next image"
         >
-          <svg className="w-6 h-6 text-white group-hover:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 sm:w-6 sm:h-6 text-white group-hover:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </button>
@@ -180,38 +224,38 @@ export default function Home() {
         {/* Content */}
         <div className="relative z-20 max-w-7xl mx-auto px-6 py-20 text-center text-white">
           <div className="mb-8">
-            <h2 className="text-5xl sm:text-6xl md:text-8xl font-bold mb-6 leading-tight">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-8xl font-bold mb-6 leading-tight">
               <span className="block text-white drop-shadow-2xl">Welcome to</span>
               <span className="block bg-gradient-to-r from-yellow-400 via-pink-400 to-purple-400 bg-clip-text text-transparent drop-shadow-lg">
                 Hat rean
               </span>
             </h2>
-            <p className="text-2xl md:text-3xl mb-6 text-gray-100 drop-shadow-lg">The Ultimate Quiz Experience 🧠✨</p>
-            <p className="text-lg md:text-xl text-gray-200 max-w-4xl mx-auto mb-12 leading-relaxed drop-shadow-md">
+            <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-6 text-gray-100 drop-shadow-lg">The Ultimate Quiz Experience 🧠✨</p>
+            <p className="text-base sm:text-lg md:text-xl text-gray-200 max-w-4xl mx-auto mb-12 leading-relaxed drop-shadow-md px-4">
               Challenge yourself with thousands of questions across multiple categories. 
               Test your knowledge, compete with friends, and learn something new every day!
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-20">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center mb-20 px-4">
             <Link href="/homepage">
-              <button className="px-10 py-5 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-2xl font-bold text-xl hover:from-yellow-600 hover:to-orange-600 transition-all transform hover:scale-105 shadow-2xl hover:shadow-yellow-500/25">
+              <button className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-2xl font-bold text-lg sm:text-xl hover:from-yellow-600 hover:to-orange-600 transition-all transform hover:scale-105 shadow-2xl hover:shadow-yellow-500/25 min-h-[56px] touch-manipulation">
                 Start Your Journey 🚀
               </button>
             </Link>
             <Link href="/quiz">
-              <button className="px-10 py-5 bg-white/20 backdrop-blur-md border-2 border-white/30 text-white rounded-2xl font-bold text-xl hover:bg-white/30 transition-all transform hover:scale-105 shadow-2xl">
+              <button className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 bg-white/20 backdrop-blur-md border-2 border-white/30 text-white rounded-2xl font-bold text-lg sm:text-xl hover:bg-white/30 transition-all transform hover:scale-105 shadow-2xl min-h-[56px] touch-manipulation">
                 Take Quiz Now 🎯
               </button>
             </Link>
           </div>
 
           {/* Stats with Glass Effect */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 px-4">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 shadow-xl">
-                <div className="text-4xl md:text-5xl font-bold text-yellow-400 mb-2 drop-shadow-lg">{stat.number}</div>
-                <div className="text-gray-200 font-medium">{stat.label}</div>
+              <div key={index} className="text-center bg-white/10 backdrop-blur-md rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/20 shadow-xl">
+                <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-yellow-400 mb-1 sm:mb-2 drop-shadow-lg">{stat.number}</div>
+                <div className="text-gray-200 font-medium text-sm sm:text-base">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -238,11 +282,11 @@ export default function Home() {
         
         <div className="relative z-20 max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h3 className="text-4xl md:text-6xl font-bold text-white mb-6 drop-shadow-2xl">Why Choose Hat rean?</h3>
-            <p className="text-xl md:text-2xl text-gray-200 drop-shadow-lg">Discover what makes our quiz platform special</p>
+            <h3 className="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-6 drop-shadow-2xl px-4">Why Choose Hat rean?</h3>
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-200 drop-shadow-lg px-4">Discover what makes our quiz platform special</p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
               <div key={index} className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 hover:bg-white/20 transition-all duration-300 border border-white/20 shadow-xl hover:shadow-2xl hover:scale-105">
                 <div className="text-5xl mb-6">{feature.icon}</div>
@@ -273,7 +317,7 @@ export default function Home() {
             <p className="text-xl md:text-2xl text-gray-200 drop-shadow-lg">Choose from a wide variety of topics</p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {categories.map((category, index) => (
               <div key={index} className="bg-white/15 backdrop-blur-lg rounded-3xl p-8 shadow-2xl hover:bg-white/25 transition-all duration-300 cursor-pointer group border border-white/20 hover:scale-105">
                 <div className="text-6xl mb-6 group-hover:scale-110 transition-transform duration-300">{category.icon}</div>
@@ -304,7 +348,7 @@ export default function Home() {
             <p className="text-xl md:text-2xl opacity-90 drop-shadow-lg">Get started in 3 simple steps</p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div className="text-center group">
               <div className="w-24 h-24 bg-white/20 backdrop-blur-lg rounded-full flex items-center justify-center mx-auto mb-8 border border-white/30 shadow-2xl group-hover:scale-110 transition-transform duration-300">
                 <span className="text-4xl">1️⃣</span>
@@ -344,7 +388,7 @@ export default function Home() {
         </div>
         
         <div className="relative z-20 max-w-7xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="text-white">
               <h3 className="text-4xl md:text-6xl font-bold mb-8 drop-shadow-2xl">About Hat rean</h3>
               <p className="text-lg md:text-xl text-gray-200 mb-8 leading-relaxed drop-shadow-lg">
@@ -392,7 +436,7 @@ export default function Home() {
             <p className="text-xl text-gray-200 drop-shadow-lg">Quick access to all platform features</p>
           </div>
           
-          <div className="grid md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
             <Link href="/quiz" className="group">
               <div className="bg-white/15 backdrop-blur-lg rounded-3xl p-8 text-center hover:bg-white/25 transition-all duration-300 group-hover:scale-105 border border-white/20 shadow-2xl">
                 <div className="text-5xl mb-6">🎯</div>
